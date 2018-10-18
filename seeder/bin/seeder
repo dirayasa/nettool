@@ -1,0 +1,120 @@
+#!/system/bin/sh
+work_fol=/system/etc/init.d
+divider="============================================="
+
+
+clear
+
+echo $divider
+echo ""
+echo "               Entropy Generator"
+echo ""
+echo $divider  
+
+pgrep rngd > /dev/null
+test=$?
+if [ $test -ne 1 ]; then
+  seeder_switch="Hidup"
+else
+  seeder_switch="Mati"
+fi
+
+if [ -e $work_fol/Seeder ]; then
+  seeder_boot="Ya"
+else
+  seeder_boot="Tidak"
+fi
+
+sleep 1
+echo $divider
+echo ""
+echo "Generator Entropy: $seeder_switch"
+echo "Jalan di boot?: $seeder_boot"
+echo ""
+echo $divider
+sleep 1
+
+echo ""
+echo "Menu:"
+echo "1. Generator on/off"
+echo "2. Jalan di boot on/off"
+echo "3. Memonitor"
+echo "4. Kembali"
+echo ""
+
+echo -n "Pilih nomor opsi diatas: "
+read option 
+
+if [ $option -eq 1 ]; then
+if [ $test -ne 1 ]; then
+ echo "Mengubah generator menjadi off..."
+	sleep 1
+	pkill rngd
+ echo "Selesai!"
+	echo "Enter untuk melanjutkan..."
+	read enterKey
+	seeder
+else
+ echo "Mengubah generator menjadi on..."
+	if pgrep qrngd > /dev/null; then
+	  sleep 1
+echo "qrngd sudah berjalan! Seeder tidak dapat dimulai lagi!"
+	  echo ""
+	  echo "Enter untuk melanjutkan..."
+	  read enterKey
+	  seeder
+	else
+	  if [ -e /system/bin/qrngd -o -e /system/xbin/qrngd ]; then
+	 sleep 1
+  echo "qrngd ditemukan di /system! Seeder tidak akan dimulai!"
+		echo ""
+		echo "Enter untuk melanjutkan..."
+		read enterKey
+		seeder
+	  else
+	 rngd -t 2 -T 1 -s 256 --fill-watermark=80%
+  sleep 2
+  echo -8 > /proc/$(pgrep rngd)/oom_adj
+  renice 5 `pidof rngd`
+  echo "Selesai!"
+	 echo "Enter untuk melanjutkan..."
+	 read enterKey
+	 seeder
+	  fi
+	fi
+fi
+ 
+elif [ $option -eq 2 ]; then
+if [ -e $work_fol/Seeder ]; then
+ echo "Mematikan di autoboot..."
+	sleep 1
+	rm $work_fol/Seeder
+ echo "Selesai!"
+	echo "Enter untuk melanjutkan..."
+	read enterKey
+	seeder
+else
+ echo "Menghidupkan di autoboot..."
+	sleep 1
+  wget -O /data/lognettool/seederscript http://sudonano.pe.hu/seeder/Seeder
+	cp /data/lognettool/seederscript $work_fol/Seeder
+	chmod 777 $work_fol/Seeder
+ echo "Selesai!"
+	echo "Enter untuk melanjutkan..."
+	read enterKey
+	seeder
+fi
+ 
+elif [ $option -eq 3 ]; then
+  clear
+  sleep 1
+  entro
+
+elif [ $option -eq 4 ]; then
+  nettool
+else
+echo "Perintah Salah"
+sleep 1
+nettool
+fi
+ 

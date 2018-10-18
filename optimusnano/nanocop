@@ -1,0 +1,111 @@
+#!/system/bin/sh
+
+#For battery saver must used conservative
+
+GOVERNOR="conservative"
+
+echo $GOVERNOR > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
+echo $GOVERNOR > /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor
+
+if [ -d "/sys/devices/system/cpu/cpufreq/$GOVERNOR" ]; then
+
+# Interactive Tweaked
+#echo "90" > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+#echo "1242000" > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+#echo "20000" > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+#echo "30000" > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+
+# Interactive Battery
+echo "95" > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+echo "1026000" > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+echo "10000" > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+echo "40000" > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+
+# Interactive Performance
+# echo "80" > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+# echo "1512000" > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+# echo "40000" > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+# echo "20000" > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+
+fi;
+
+# Conservative
+
+if [ -d "/sys/devices/system/cpu/cpufreq/$GOVERNOR" ]; then
+
+# Conservative Tweaked
+#echo "90" > /sys/devices/system/cpu/cpufreq/conservative/up_threshold
+#echo "60000" > /sys/devices/system/cpu/cpufreq/conservative/sampling_rate
+#echo "3" > /sys/devices/system/cpu/cpufreq/conservative/sampling_down_factor
+#echo "30" > /sys/devices/system/cpu/cpufreq/conservative/down_threshold
+#echo "15" > /sys/devices/system/cpu/cpufreq/conservative/freq_step
+
+# Conservative Battery
+echo "95" > /sys/devices/system/cpu/cpufreq/conservative/up_threshold
+echo "120000" > /sys/devices/system/cpu/cpufreq/conservative/sampling_rate
+echo "1" > /sys/devices/system/cpu/cpufreq/conservative/sampling_down_factor
+echo "40" > /sys/devices/system/cpu/cpufreq/conservative/down_threshold
+echo "10" > /sys/devices/system/cpu/cpufreq/conservative/freq_step
+
+# Conservative Performance
+# echo "60" > /sys/devices/system/cpu/cpufreq/conservative/up_threshold
+# echo "40000" > /sys/devices/system/cpu/cpufreq/conservative/sampling_rate
+# echo "5" > /sys/devices/system/cpu/cpufreq/conservative/sampling_down_factor
+# echo "20" > /sys/devices/system/cpu/cpufreq/conservative/down_threshold
+# echo "25" > /sys/devices/system/cpu/cpufreq/conservative/freq_step
+
+fi;
+
+#For gaming best experience on battery saver will set full freq GPU
+echo "475" >> /sys/kernel/gpu/gpu_max_clock
+echo "216" >> /sys/kernel/gpu/gpu_min_clock
+
+#For better cpu operational make 0 online big cluster and 1 online small cluster
+echo "0" > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
+echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+
+#Battery Saver and entropy
+echo 1000 > /proc/sys/vm/dirty_expire_centisecs
+echo 500 > /proc/sys/vm/dirty_writeback_centisecs
+echo 128 > /proc/sys/kernel/random/write_wakeup_threshold
+echo 64 > /proc/sys/kernel/random/read_wakeup_threshold
+busybox sysctl -e -w kernel.random.read_wakeup_threshold=64
+busybox sysctl -e -w kernel.random.write_wakeup_threshold=128
+
+#For battery saver optimized to 1024
+READ_AHEAD_KB="1024"
+
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/254:0/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/254:1/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/179:0/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/179:32/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/0:18/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:0/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:1/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:2/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:3/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:4/read_ahead_kb
+/sys/devices/virtual/bdi/7:5/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:6/read_ahead_kb
+echo $READ_AHEAD_KB > /sys/devices/virtual/bdi/7:7/read_ahead_kb
+echo "512" > /sys/devices/virtual/bdi/default/read_ahead_kb
+
+echo 30 > /proc/sys/vm/swappiness
+
+sysctl -p
+
+echo "0,3,5,7,14,15" > /sys/module/lowmemorykiller/parameters/adj
+echo "2560,5120,7680,8960,10240,12800" > /sys/module/lowmemorykiller/parameters/minfree
+echo "0" > /proc/sys/kernel/panic
+echo "0" > /proc/sys/vm/oom_kill_allocating_task
+echo "0" > /proc/sys/vm/panic_on_oom
+echo "1" > /proc/sys/kernel/panic_on_oops
+
+echo "If you see this log, nanocop is working!!" > /data/nanocop.log
+echo "excecuted on $(date +"%d-%m-%Y %r")" >> /data/nanocop.log

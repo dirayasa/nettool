@@ -1,0 +1,347 @@
+#!/system/bin/sh
+# Codename : Zero
+# Maker : nano
+#
+#This is building with heart for you who as used this tool, but you must to know if this open source
+#file and you can edit this file or modify this tool, but don't delete this text, codename or maker name.
+#This so hard for me to make this file to easily given command on terminal android.
+#
+#I hope you can enjoy to use it.
+#You can donate me with Bitcoin
+#
+#Address Bitcoin is 
+#Thanks for all forum, linux forum, and Allah for my idea and knowledge to make this.
+#And Thanks for you and big thanks for donator.
+mount -o rw,remount /system
+mount -o rw,remount /data
+mount -o rw,remount /cache
+clear
+ijinsistem="Mengatur sistem perizinan..."
+pasangsistem="Memasang berkas kedalam sistem..."
+balek="Enter untuk kembali..."
+fullcache="/data/data/*/cache/.* /data/data/*/code_cache/.* /sdcard/*/.tmp/* /sdcard/*/*/.tmp/* /sdcard/.tmp/* /sdcard/*/.tmp/* /sdcard/*/*/.tmp/* /sdcard/*/*/*/.tmp/* /data/data/*/cache/* /data/data/*/code_cache/* /sdcard/Android/data/.*cache/* /sdcard/Android/data/*/cache/* /sdcard/*/.ads/* /sdcard/*/*/.ads/* /sdcard/*/*/*/.ads/* /sdcard/*/Cache/* /sdcard/*/*/Cache/* /sdcard/.*cache/* /sdcard/*/.*cache/* /sdcard/*/*/.*cache/* /sdcard/*cache/* /sdcard/*/*cache/* /sdcard/*/*/*cache/* /sdcard/DCIM/.thumbnails/* /sdcard/DCIM/.thumbnails/.* /sdcard/UCDownloads/cache/* /data/anr/* /data/cache/* /data/log/* /data/tombstones/* /data/backup/pending/* /data/system/dropbox/* /sdcard/LOST.DIR /data/system/usagestats/* /data/*.log /data/*.txt /data/backup/pending/*.tmp /data/cache/*.* /data/dalvik-cache/*.apk /data/dalvik-cache/*.tmp /data/dalvik-cache/*.log /data/dalvik-cache/*.txt /data/data/*.log /data/data/*.txt /data/log/*.log /data/log/*.txt /data/local/*.apk /data/local/*.log /data/local/*.txt /data/last_alog/*.log /data/last_alog/*.txt /data/last_kmsg/*.log /data/last_kmsg/*.txt /data/mlog/* /data/system/*.log /data/system/*.txt /data/local/tmp/* /data/tmp/* /data/system/appusagestats/* /mnt/expand/*/user*/*"
+fullapk="/sdcard/*.apk /sdcard/*/*.apk /sdcard/*/*/*.apk /sdcard/*/*/*/*.apk /sdcard/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*.apk /sdcard/*/*/*/*/*/*/*.apk"
+id=`id`; id=`echo ${id#*=}`; id=`echo ${id%%\(*}`; id=`echo ${id%% *}`
+if [ "$id" != "0" ] && [ "$id" != "root" ]; then
+echo "Belum melakukan akses ROOT"
+sleep 3
+exit
+fi
+if [[ -f /system/xbin/busybox && -f /system/bin/busybox ]]; then
+	echo "BUSYBOX belum di install"
+	exit
+fi
+if [ ! -f /system/bin/n ]; then
+	echo "nettool" >> /system/bin/n
+	chmod 775 /system/bin/n
+	echo "Sekarang NETTOOL bisa dipanggil dengan perintah 'n'saja"
+	sleep 3
+fi
+if [ ! -f /data/lognettool/pingtool.txt ]; then
+	echo "snbdc-dns2.xl.net.id" >> /data/lognettool/pingtool.txt;
+fi
+if [ ! -f /data/lognettool/pingtime.txt ]; then
+	echo "0.5" >> /data/lognettool/pingtime.txt;
+fi
+if [ ! -d /sdcard/netdir/ ]; then mkdir /sdcard/netdir/ 2> /dev/null; fi
+if [ ! -d /data/lognettool/ ]; then mkdir /data/lognettool/ 2> /dev/null; fi
+filetmp=/data/lognettool
+tmpsd=/sdcard/netdir
+if [ -f $filetmp/ddos1.py ]; then rm -f $filetmp/ddos1.py; fi
+if [ -f $filetmp/ddos2.py ]; then rm -f $filetmp/ddos2.py; fi
+if [ -f $filetmp/ddos3.py ]; then rm -f $filetmp/ddos3.py; fi
+if [ -f $filetmp/ddos4.py ]; then rm -f $filetmp/ddos4.py; fi
+if [ -f $filetmp/ilucx.pyc ]; then rm -f $filetmp/ilucx.pyc; fi
+if [ -f $filetmp/ilucx2.pyc ]; then rm -f $filetmp/ilucx2.pyc; fi
+if [ -f $filetmp/hostterinstall1 ]; then
+	hostiklan="\e[1;32mHidup\e[0m"
+else
+	hostiklan="\e[1;31mMati\e[0m"
+fi
+if [ -f $filetmp/.blokiriklan.sh ]; then rm $filetmp/.blokiriklan.sh 2> /dev/null; fi
+if [ `ifconfig wlan0 2>/dev/null | grep inet\ addr | wc -l` -eq 0 ]; then
+	wistat="\e[1;31m                   Wifi Tidak Aktif\e[0m"
+	wistat1="\e[1;31mWifi Tidak Tersambung\e[0m"
+else
+	wistat="\e[1;32m                      Wifi AKtif\e[0m"
+	wistat1="\e[1;32m`ifconfig wlan0 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+fi
+if [ `ifconfig wlan0 2>/dev/null | grep "HWaddr " | wc -l` -eq 0 ]; then
+	wistat2="\e[1;31mHidupkan Wifi\e[0m"
+else
+	wistat2="\e[1;32m`ifconfig wlan0 2>/dev/null | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`\e[0m"
+fi
+if [ `ifconfig rmnet_data0 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data0 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data1 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data1 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data2 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data2 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data3 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data3 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data4 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data4 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data5 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data5 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+elif [ `ifconfig rmnet_data6 2>/dev/null | grep inet\ addr | wc -l` -eq 1 ]; then
+	dataku="\e[1;32m`ifconfig rmnet_data6 2>/dev/null | grep "inet " | awk -F'[: ]+' '{ print $4 }'`\e[0m"
+else
+	dataku="\e[1;31mData Tidak Aktif\e[0m"
+fi
+if [ -f `getprop net.dns1` ]; then
+	dns1ku="DNS Tidak Ada"
+else
+	dns1ku="\e[93m`getprop net.dns1`\e[0m"
+fi
+if [ -f `getprop net.dns2` ]; then
+	dns2ku="DNS Tidak Ada"
+else
+	dns2ku="\e[93m`getprop net.dns2`\e[0m"
+fi
+if [ `arp -a 2>/dev/null | grep "?" | awk '{print $2}' | wc -l 2>/dev/null` -eq 1 ]; then
+	iphost="     \e[1;32m`arp -a | awk '{print $2}' 2>/dev/null`\e[0m"
+else
+	iphost="Sambungan Tidak Tersedia"
+fi
+if [ `arp -a 2>/dev/null | grep "at" | awk '{print $4}' | wc -l 2>/dev/null` -eq 1 ]; then
+	hwhost="      \e[1;32m(`arp -a | awk '{print $4}' 2>/dev/null`)\e[0m"
+else
+	hwhost="Sambungan Tidak Tersedia"
+fi
+if [ -f $filetmp/bckprstr ]; then
+	blokstat="\e[1;31mNonaktif\e[0m"
+elif [[ ! -f $filetmp/hostterinstall ]]; then
+	blokstat="\e[1;31mNonaktif\e[0m"
+else
+	blokstat="\e[1;32mAktif\e[0m"
+fi
+if ping -q -c 1 -W 1 google.com >/dev/null; then
+	if [ `curl -sI http://sudonano.pe.hu/nettool/nettool | grep Length: | awk '{print $2}'` == `wc -c /system/bin/nettool | awk '{print $1}'` &> /dev/null ]; then
+		newing="\e[1;32mTerbaru\e[0m"
+	else
+		newing="\e[93mTersedia\e[0m"
+	fi
+else
+	newing="Sambungan Tidak Tersedia"
+fi
+clear
+echo "=========================================================="
+echo "         NETWORK TOOLS 2017  Powered by LazyCod            "
+echo "=========================================================="
+echo "             IP            |          MAC Address         "
+echo -n "  $iphost      "
+echo -n "$hwhost"
+echo ""
+echo -n "\e[1;30mTerdeteksi: \e[0m" 
+getprop net.hostname
+echo -n "\e[1;36mIP WIFI: \e[0m" 
+echo $wistat1
+echo -n "\e[1;36mMAC Address : \e[0m" 
+echo $wistat2
+echo -n "\e[1;36mIP Data: \e[0m" 
+echo $dataku
+echo -n "\e[1;36mDNS 1: \e[0m" 
+echo $dns1ku
+echo -n "\e[1;36mDNS 2: \e[0m" 
+echo $dns2ku
+echo -n "\e[1;36mStatus Adblock: \e[0m" 
+echo $blokstat
+echo -n "\e[1;36mPembaruan: \e[0m"
+echo $newing
+echo "=========================================================="
+echo "Menu Net tools:"
+echo "\e[1;35m1. Recovery Kata Sandi Wifi\e[0m"
+echo "\e[1;35m2. Ganti DNS\e[0m"
+echo "\e[1;35m3. Dapatkan IP Address\e[0m"
+echo "\e[1;35m4. Ganti IP Address (IP WIFI)\e[0m"
+echo "\e[1;35m5. Internet Booster\e[0m"
+echo "\e[1;35m6. Sinyal Booster\e[0m"
+echo "\e[1;35m7. Latency Booster (Untuk Game Online)\e[0m"
+echo "\e[1;35m8. Pengaturan Adblock\e[0m"
+echo "\e[1;35m9. Deteksi IP (Matikan AdBlock)\e[0m"
+echo "\e[1;35m10. Deteksi Pemilik IP (Matikan AdBlock)\e[0m"
+echo "\e[1;35m11. DDos Attack\e[0m"
+echo "\e[1;35m12. Jalankan Terminal Bash LD\e[0m"
+echo "=========================================================="
+echo "\e[90m20. Utilitas\e[0m"
+echo "\e[90m21. Entropy\e[0m"
+echo "\e[90m0. Segarkan\e[0m"
+echo "=========================================================="
+echo -n "Pilih angka yang tersedia: "
+read option
+if [ $option -eq 1 ]; then
+	clear
+	echo ""
+	echo "                  Wifi Password Recovery            "
+	echo ""
+	echo -n "Nama Wifi: "
+	cat /data/misc/wifi/wpa_supplicant.conf | grep -E "ssid=" | awk -F'"' '{print $2}'
+	echo -n "Pass: "
+	cat /data/misc/wifi/wpa_supplicant.conf | grep -E "psk=" | awk -F'"' '{print $2}'
+	echo ""
+	echo "                   Enter untuk  kembali"
+	read enterKey
+	nettool
+elif [ $option -eq 2 ]; then
+	clear
+	echo ""
+	echo "\e[1;34m                     DNS Changer\e[0m"
+	echo ""
+	echo "\e[1;35mGanti DNS:\e[0m"
+	echo "\e[1;35m1. Google DNS\e[0m"
+   	echo "\e[1;35m2. OpenDNS\e[0m"
+   	echo "\e[1;35m3. OpenDNS Family Shield\e[0m"
+   	echo "4. Kembali"
+	echo ""
+	echo -n "Pilih angka yang tersedia: "
+	read milihdns 
+		if [ $milihdns -eq 1 ]; then
+			setprop net.rmnet0.dns1 8.8.8.8
+			setprop net.rmnet0.dns2 8.8.4.4
+			setprop net.ppp0.dns1 8.8.8.8
+			setprop net.ppp0.dns2 8.8.4.4
+			setprop net.dns1 8.8.8.8
+			setprop net.dns2 8.8.4.4
+   			sleep 1
+   			echo "Google DNS Sukses"
+   			sleep 2
+   			nettool
+		elif [ $milihdns -eq 2 ]; then
+			setprop net.rmnet0.dns1 208.67.222.222
+			setprop net.rmnet0.dns2 208.67.220.220
+			setprop net.ppp0.dns1 208.67.222.222
+			setprop net.ppp0.dns2 208.67.220.220
+			setprop net.dns1 208.67.222.222
+			setprop net.dns2 208.67.220.220
+   			sleep 1
+   			echo "OpenDNS Sukses"
+   			sleep 2
+   			nettool
+   		elif [ $milihdns -eq 3 ]; then
+   			setprop net.rmnet0.dns1 208.67.222.123
+   			setprop net.rmnet0.dns2 208.67.220.123
+   			setprop net.ppp0.dns1 208.67.222.123
+   			setprop net.ppp0.dns2 208.67.220.123
+			setprop net.dns1 208.67.222.123
+   			setprop net.dns2 208.67.220.123
+   			sleep 1
+   			echo "OpenDNS Family Shield Sukses"
+   			sleep 2
+   			nettool
+   		elif [ $milihdns -eq 4 ]; then
+   			nettool
+		else
+			echo "Perintah salah"
+			sleep 1
+			exit
+		fi
+elif [ $option -eq 3 ]; then
+	clear
+	echo ""
+	echo "                      Ping Tool"
+	echo ""
+	echo "Silahkan tulis domain.."
+	echo -n "Domain: "
+	read fing
+	echo `ping -c 1 $fing 2>/dev/null | grep "PING" | awk '{ print $3 }'` > $tmpsd/ShowIp.txt;
+	echo -n "IP "$fing" adalah "
+	ping -c 1 $fing 2>/dev/null | grep "PING" | awk '{ print $3 }'
+	echo ""
+	echo "Alamat IP terdapat di file ShowIp.txt di luar folder memori internal"
+	echo -n "Tekan enter.."
+	read enterKey
+	nettool
+elif [ $option -eq 4 ]; then
+	clear
+	echo ""
+	echo "                   IP Changer"
+	echo ""
+	if [ `ifconfig wlan0 | wc -l 2>/dev/null` -eq 0 ]; then
+		echo ""
+		echo "Hidupkan wifi terlebih dahulu"
+		sleep 3
+		nettool
+	else
+		echo ""
+		echo "IP WIFI terakhir "
+		ifconfig wlan0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'
+		echo "Default gateway adalah 192.168.x.1"
+		echo ""
+		echo ""
+		sleep 1
+		echo -n "Silahkan masukkan baris 3 angka terakhir 1-255:"
+		read gantiip
+		echo -n "Silahkan masukkan baris 4 angka terakhir 1-255:"
+		read gantiip1
+		if [ $gantiip 2>/dev/null -gt "255" ]; then
+			echo "Value yang dimaksukkan lebih dari 255"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip 2>/dev/null -lt "1" ]; then
+			echo "Value yang dimaksukkan kurang dari 1"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip1 2>/dev/null -gt "255" ]; then
+			echo "Value yang dimaksukkan lebih dari 255"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		elif [ $gantiip1 2>/dev/null -lt "1" ]; then
+			echo "Value yang dimaksukkan kurang dari 1"
+			echo "Proses dibatalkan.."
+			sleep 5
+			nettool
+		else
+			echo "IP Address diganti"
+			ifconfig wlan0 192.168.$gantiip.$gantiip1/24
+			sleep 1
+			echo "Ganti IP sukses, mulai ulang koneksi untuk kembali ke semula"
+			echo -n "IP saat ini "
+			ifconfig wlan0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'
+			echo ""
+			echo -n "Tekan enter"
+			read enterKey
+			nettool
+		fi
+	fi
+elif [ $option -eq 5 ]; then
+	echo "Internet Booster sedang di proses"
+	sleep 1
+	if [ `ifconfig wlan0 | wc -l 2>/dev/null` -eq 1 ]; then
+		svc wifi disable 2>/dev/null
+		svc wifi enable 2>/dev/null
+	fi
+	svc data disable 2>/dev/null
+	svc data enable 2>/dev/null
+	sleep 1
+	ip link set dev rmnet0 mtu 1500 2> /dev/null
+	ip link set dev rmnet1 mtu 1500 2> /dev/null
+	ip link set dev rmnet2 mtu 1500 2> /dev/null
+	ip link set dev rmnet3 mtu 1500 2> /dev/null
+	ip link set dev rmnet4 mtu 1500 2> /dev/null
+	ip link set dev rmnet5 mtu 1500 2> /dev/null
+	ip link set dev rmnet6 mtu 1500 2> /dev/null
+	ip link set dev rmnet7 mtu 1500 2> /dev/null
+	setprop persist.data_dsc_mtu 1500
+	setprop persist.data_netmgrd_mtu 1500
+	setprop net.tcp.buffersize.default 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.wifi 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.umts 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.edge 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.gprs 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo_a 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.evdo_b 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.hsdpa 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.hsupa 4096,62780,256960,4096,62780,256960
+	setprop net.tcp.buffersize.lte 4096,62780,256960,4096,62780,256960
+	echo "0" > /proc/sys/net/ipv4/conf/default/secure_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/default/accept_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/default/accept_source_route;
+	echo "0" > /proc/sys/net/ipv4/conf/all/secure_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/all/accept_redirects;
+	echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route;
+	echo "0" > /proc/sys/net/ipv4/ip_forward;
+	echo "0" > /proc/sys/net/

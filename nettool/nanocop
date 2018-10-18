@@ -1,0 +1,234 @@
+#!/system/bin/sh
+busybox fstrim -v /data
+busybox fstrim -v /cache
+busybox fstrim -v /system
+busybox killall -9 android.process.media
+busybox killall -9 mediaserver
+busybox killall -9 com.google.android.gms
+busybox killall -9 com.google.android.gms.persistent
+busybox killall -9 com.google.android.gsf
+busybox killall -9 com.google.android.gsf.persistent
+busybox killall -9 com.google.process.gapps
+setprop windowsmgr.max_events_per_sec 250;
+setprop ro.telephony.call_ring.delay 0;
+setprop wifi.supplicant_scan_interval 180; 
+setprop ro.media.enc.jpeg.quality 100;
+setprop persist.adb.notify 0;  
+
+
+echo "500" > /proc/sys/vm/dirty_expire_centisecs
+echo "1000" > /proc/sys/vm/dirty_writeback_centisecs
+
+LOOP=`ls -d /sys/block/loop*`;
+RAM=`ls -d /sys/block/ram*`;
+MMC=`ls -d /sys/block/mmc*`;
+for k in $LOOP $RAM
+do
+echo "0" > $k/queue/rotational;
+echo "4089" > $k/queue/read_ahead_kb;
+done
+
+if [ -e /sys/devices/virtual/bdi/179:0/read_ahead_kb ]
+  then
+    /system/xbin/echo "4096" > /sys/devices/virtual/bdi/179:0/read_ahead_kb;
+fi;
+
+# SD Tweak 
+echo "4089" > /sys/block/mmcblk0/queue/read_ahead_kb
+if [ ! -f /sys/block/mmcblk1/queue/read_ahead_kb]
+then
+sleep 60
+fi
+echo "4089" > /sys/block/mmcblk1/queue/read_ahead_kb
+if [ ! -f /sys/devices/virtual/bdi/179:0/read_ahead_kb]
+then
+sleep 60
+fi
+
+if [ -e /sys/devices/virtual/bdi/179:0/read_ahead_kb ]; then
+        /system/xbin/echo "4089" > /sys/devices/virtual/bdi/179:0/read_ahead_kb;
+fi
+
+if [ -e /sys/devices/virtual/bdi/default/read_ahead_kb ]; then
+        /system/xbin/echo "4089" > /sys/devices/virtual/bdi/default/read_ahead_kb;
+fi
+
+if [ -e /proc/sys/kernel/sched_min_granularity_ns ]; then
+    echo "200000" > /proc/sys/kernel/sched_min_granularity_ns
+fi
+
+   renice -17 `pidof com.teslacoilsw.launcher`; # Launcher
+   renice -20 `pidof com.android.phone`;   
+   
+renice -18 `pidof com.android.contact`; # contact app
+   renice -18 `pidof com.android.mms`; # Text message app
+   renice -18 `pidof com.android.inputmethod.latin`; # Keyboard
+   renice -10 `pidof com.sec.android.app.controlpanel`; # Task manager
+   renice -18 `pidof com.android.systemui`; # Status bar
+   renice -18 `pidof com.android.settings`; # Settings menu
+   renice -17 `pidof com.android.vending`; # Market app
+   renice -15 `pidof com.android.hwcamera`; # Camera app
+   renice -18 `pidof com.ucmobile.intl`; # Browser app
+   renice -3 `pidof com.providers.media`; # media app
+   renice -15 `pidof com.google.android.gms`; # Google app
+   renice -5 `pidof com.smartfren`; # Customer service
+   renice -3 `pidof com.process.acore`;
+
+echo 7035 > /sys/class/touch/switch/set_touchscreen;
+echo 8002 > /sys/class/touch/switch/set_touchscreen;
+echo 11000 > /sys/class/touch/switch/set_touchscreen;
+echo 13060 > /sys/class/touch/switch/set_touchscreen;
+echo 14005 > /sys/class/touch/switch/set_touchscreen;
+
+# ==================================
+
+path=`busybox ls -d /sys/block/* 2>/dev/null`;
+for S in $path;
+do
+    if [ -e $S/queue/rotational ]; then
+        busybox echo "0" > $S/queue/rotational;
+    fi;
+    if [ -e $S/queue/iostats ]; then
+        busybox echo "0" > $S/queue/iostats;
+    fi;
+    if [ -e $S/queue/nr_requests ]; then
+        busybox echo "1024" > $S/queue/nr_requests;
+    fi;
+    if [ -e $S/queue/nomerges ]; then
+        busybox echo "1" > $S/queue/nomerges;
+    fi; 
+    
+done
+
+# ======================
+#     Network Tweaks
+# ======================
+
+echo "nameserver 8.8.8.8" > /system/etc/resolv.conf;
+echo "nameserver 8.8.4.4" > /system/etc/resolv.conf;
+
+#Gtalk Without Wifi
+sqlite3 /data/data/com.google.android.gsf/databases/gservices.db 'update main set value="false" where name="gtalk_vc_wifi_only"'
+
+# Wifi Tweaks
+setprop pm.sleep_mode 1;
+setprop ro.ril.disable.power.collapse 0;
+
+
+# Phone Tweaks
+setprop ro.lge.proximity.delay 25;
+setprop mot.proximity.delay 25;
+if busybox [ $ENABLE_SYSCTL -eq 1 -a -f /system/etc/sysctl.conf ]; then
+  sysctl -p /system/etc/sysctl.conf
+fi
+sysctl -p
+sysctl -p /system/etc/sysctl.conf
+
+PATH=$PATH:/system/xbin:/sbin:/vendor/bin:/system/sbin:/system/bin
+if [ -d "/data/local/busybox*/xbin" ]; then PATH=$PATH:`ls -d /data/local/busybox*/xbin 2>/dev/null`; fi
+
+mount -o remount,rw /system 2>/dev/null;
+busybox mount -o remount,rw /syetem 2>/dev/null;
+
+GET=$(echo $(getprop ro.build.version.release));
+
+case $GET in
+
+"2.3"*)
+cp /data/tmp/2.3.x/lib/libncurses.so /system/lib;
+cp /data/tmp/2.3.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+"4.0"*)
+cp /data/tmp/4.0.x/lib/libncurses.so /system/lib;
+cp /data/tmp/4.0.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+"4.1"*)
+cp /data/tmp/4.1.x/lib/libncurses.so /system/lib;
+cp /data/tmp/4.1.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+"4.2"*)
+cp /data/tmp/4.2.x/lib/libncurses.so /system/lib;
+cp /data/tmp/4.2.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+"4.3"*)
+cp /data/tmp/4.3.x/lib/libncurses.so /system/lib;
+cp /data/tmp/4.3.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+"4.4"*)
+cp /data/tmp/4.4.x/lib/libncurses.so /system/lib;
+cp /data/tmp/4.4.x/xbin/sqlite3 /system/xbin;
+chmod 644 /system/lib/libncurses.so;
+chown 0.0 /system/lib/libncurses.so;
+chmod 6755 /system/xbin/sqlite3;
+chown 0.0 /system/xbin/sqlite3;
+;;
+esac
+
+
+
+
+for i in \
+`busybox find /data -iname "*.db"`; 
+do \
+  /system/xbin/sqlite3 $i 'VACUUM;'; 
+  /system/xbin/sqlite3 $i 'REINDEX;'; 
+done;
+
+if [ -d "/dbdata" ]; then
+  for i in \
+  `busybox find /dbdata -iname "*.db"`; 
+  do \
+    /system/xbin/sqlite3 $i 'VACUUM;'; 
+    /system/xbin/sqlite3 $i 'REINDEX;'; 
+  done;
+fi;
+
+
+if [ -d "/datadata" ]; then
+  for i in \
+  `busybox find /datadata -iname "*.db"`; 
+  do \
+    /system/xbin/sqlite3 $i 'VACUUM;'; 
+    /system/xbin/sqlite3 $i 'REINDEX;'; 
+  done;
+fi;
+
+
+for i in \
+`busybox find /sdcard -iname "*.db"`; 
+do \
+  /system/xbin/sqlite3 $i 'VACUUM;'; 
+  /system/xbin/sqlite3 $i 'REINDEX;'; 
+done;
+
+rm -rf /data/tmp;
+rm /system/etc/init.d/00SQlite;
+
+mount -o remount,ro /system 2>/dev/null;
+busybox mount -o remount,ro /system 2>/dev/null;
+
+mpengine ()
+{
+(sh /system/mpengine/MPEngine9/MPEngine9X &);
+}
+mpengine &
